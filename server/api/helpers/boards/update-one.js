@@ -97,6 +97,7 @@ module.exports = {
             githubRepo: board.githubRepo,
             prevPosition: values.position ? inputs.record.position : undefined,
             position: values.position && board.position,
+            trashAutoEmptyDays: values.trashAutoEmptyDays !== undefined && values.trashAutoEmptyDays !== inputs.record.trashAutoEmptyDays ? board.trashAutoEmptyDays : undefined,
           },
         },
         currentUser,

@@ -156,8 +156,17 @@ const updateBoardSearchParams = (id, searchParams) => ({
   },
 });
 
+const updateBoardContext = (id, context) => ({
+  type: ActionTypes.BOARD_CONTEXT_UPDATE,
+  payload: {
+    id,
+    context,
+  },
+});
+
 export default {
   createBoard,
+  updateBoardContext,
   handleBoardCreate,
   fetchBoard,
   updateBoard,

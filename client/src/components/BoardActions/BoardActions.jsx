@@ -5,12 +5,15 @@ import clsx from 'clsx';
 import pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 
+import { BoardContexts } from '../../constants/Enums';
 import Paths from '../../constants/Paths';
 import BoardActionsPopup from '../BoardActionsPopup';
 import CardSearch from '../CardSearch';
 import ConnectionsPopup from '../ConnectionsPopup';
+import DeletePopup from '../DeletePopup';
 import MembershipPermissionsSelectStep from '../MembershipPermissionsSelectStep';
 import Memberships from '../Memberships';
+import TrashAutoEmptyPopup from '../TrashAutoEmptyPopup';
 import { Icon, IconType, IconSize, Button, ButtonVariant } from '../Utils';
 import Filters from './Filters';
 
@@ -43,6 +46,7 @@ const BoardActions = React.memo(
     mailServiceAvailable,
     mailServiceInboundEmail,
     viewMode,
+    trashListId,
     onViewModeChange,
     onMembershipCreate,
     onBoardTemplateCreate,
@@ -62,6 +66,8 @@ const BoardActions = React.memo(
     onBoardDelete,
     onBoardExport,
     onBoardSearchParamsUpdate,
+    onContextChange,
+    onTrashEmpty,
     onActivitiesFetch,
     onMailTokenCreate,
     onMailTokenUpdate,
@@ -148,6 +154,40 @@ const BoardActions = React.memo(
             <Icon type={IconType.List} size={IconSize.Size18} />
           </Button>
         </div>
+        <div className={s.action}>
+          {[
+            [BoardContexts.BOARD, IconType.Board, 'common.showBoard'],
+            [BoardContexts.ARCHIVE, IconType.Archive, 'common.showArchive'],
+            [BoardContexts.TRASH, IconType.Trash, 'common.showTrash'],
+          ].map(([context, iconType, titleKey]) => (
+            <Button key={context} variant={ButtonVariant.IconBase} title={t(titleKey)} onClick={() => onContextChange(context)} className={clsx(s.switchViewButton, board.context === context && s.active)}>
+              <Icon type={iconType} size={IconSize.Size16} />
+            </Button>
+          ))}
+        </div>
+        {board.context === BoardContexts.TRASH && canEdit && trashListId && cardCount > 0 && (
+          <div className={s.action}>
+            <DeletePopup title={t('common.emptyTrash')} content={t('common.areYouSureYouWantToEmptyTrash')} buttonContent={t('common.emptyTrash')} onConfirm={() => onTrashEmpty(trashListId)} position="bottom">
+              <Button variant={ButtonVariant.Icon} title={t('common.emptyTrash')} className={s.emptyTrashButton}>
+                {t('common.emptyTrash')}
+              </Button>
+            </DeletePopup>
+          </div>
+        )}
+        {board.context === BoardContexts.TRASH && isProjectManager && (
+          <div className={s.action}>
+            <TrashAutoEmptyPopup defaultDays={board.trashAutoEmptyDays ?? null} onUpdate={(data) => onBoardUpdate(board.id, data)} position="bottom">
+              <Button
+                variant={ButtonVariant.Icon}
+                title={board.trashAutoEmptyDays ? t('common.trashEmptiesAfterDays', { days: board.trashAutoEmptyDays }) : t('common.emptyTrashAutomatically')}
+                className={s.trashAutoEmptyButton}
+              >
+                <Icon type={IconType.Settings} size={IconSize.Size16} />
+                {board.trashAutoEmptyDays ? <span className={s.trashAutoEmptyDays}>{t('common.trashEmptiesAfterDays', { days: board.trashAutoEmptyDays })}</span> : null}
+              </Button>
+            </TrashAutoEmptyPopup>
+          </div>
+        )}
         {isProjectManager && (
           <div className={clsx(s.action, s.actionRightFirst)}>
             <Link to={Paths.SETTINGS_PROJECT.replace(':id', projectId)}>
@@ -239,6 +279,9 @@ BoardActions.propTypes = {
   mailServiceAvailable: PropTypes.bool.isRequired,
   mailServiceInboundEmail: PropTypes.string.isRequired,
   viewMode: PropTypes.string.isRequired,
+  trashListId: PropTypes.string,
+  onContextChange: PropTypes.func.isRequired,
+  onTrashEmpty: PropTypes.func.isRequired,
   onViewModeChange: PropTypes.func.isRequired,
   onMembershipCreate: PropTypes.func.isRequired,
   onBoardTemplateCreate: PropTypes.func.isRequired,
@@ -262,6 +305,10 @@ BoardActions.propTypes = {
   onMailTokenCreate: PropTypes.func.isRequired,
   onMailTokenUpdate: PropTypes.func.isRequired,
   onMailTokenDelete: PropTypes.func.isRequired,
+};
+
+BoardActions.defaultProps = {
+  trashListId: null,
 };
 
 export default BoardActions;

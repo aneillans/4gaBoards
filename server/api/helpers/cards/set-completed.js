@@ -30,10 +30,10 @@ module.exports = {
 
     let targetList;
     if (isCompleted) {
-      [targetList] = await List.find({ boardId: board.id, isCompleted: true }).sort('position DESC').limit(1);
+      [targetList] = await List.find({ boardId: board.id, type: List.Types.ACTIVE, isCompleted: true }).sort('position DESC').limit(1);
 
       if (!targetList) {
-        const [lastList] = await List.find({ boardId: board.id }).sort('position DESC').limit(1);
+        const [lastList] = await List.find({ boardId: board.id, type: List.Types.ACTIVE }).sort('position DESC').limit(1);
         const nextPosition = (lastList?.position || 0) + sails.config.custom.positionGap;
 
         targetList = await sails.helpers.lists.createOne.with({
@@ -48,7 +48,7 @@ module.exports = {
         });
       }
     } else {
-      [targetList] = await List.find({ boardId: board.id, isCompleted: false }).sort('position').limit(1);
+      [targetList] = await List.find({ boardId: board.id, type: List.Types.ACTIVE, isCompleted: false }).sort('position').limit(1);
       if (!targetList) {
         targetList = await sails.helpers.lists.createOne.with({
           values: {

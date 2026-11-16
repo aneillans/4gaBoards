@@ -37,7 +37,7 @@ module.exports = {
   async fn(inputs) {
     const { values, currentUser, skipMetaUpdate } = inputs;
 
-    const lists = await sails.helpers.boards.getLists(values.board.id);
+    const lists = await sails.helpers.boards.getLists.with({ idOrIds: values.board.id, onlyActive: true });
 
     const { position, repositions } = sails.helpers.utils.insertToPositionables(values.position, lists);
 

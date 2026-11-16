@@ -15,6 +15,7 @@ export default function* boardsWatchers() {
     takeEvery(EntryActionTypes.BOARD_DELETE, ({ payload: { id } }) => services.deleteBoard(id)),
     takeEvery(EntryActionTypes.BOARD_DELETE_HANDLE, ({ payload: { board } }) => services.handleBoardDelete(board)),
     takeEvery(EntryActionTypes.BOARD_EXPORT, ({ payload: { id, data } }) => services.exportBoard(id, data)),
+    takeEvery(EntryActionTypes.BOARD_CONTEXT_UPDATE, ({ payload: { id, context } }) => services.updateBoardContext(id, context)),
     takeEvery(EntryActionTypes.BOARD_SEARCH_PARAMS_UPDATE, ({ payload: { id, searchParams } }) => services.updateBoardSearchParams(id, searchParams)),
   ]);
 }

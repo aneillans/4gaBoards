@@ -82,6 +82,28 @@ deleteList.failure = (id, error) => ({
   },
 });
 
+const clearList = (id) => ({
+  type: ActionTypes.LIST_CLEAR,
+  payload: {
+    id,
+  },
+});
+
+clearList.success = (id) => ({
+  type: ActionTypes.LIST_CLEAR__SUCCESS,
+  payload: {
+    id,
+  },
+});
+
+clearList.failure = (id, error) => ({
+  type: ActionTypes.LIST_CLEAR__FAILURE,
+  payload: {
+    id,
+    error,
+  },
+});
+
 const handleListDelete = (list) => ({
   type: ActionTypes.LIST_DELETE_HANDLE,
   payload: {
@@ -95,5 +117,6 @@ export default {
   updateList,
   handleListUpdate,
   deleteList,
+  clearList,
   handleListDelete,
 };

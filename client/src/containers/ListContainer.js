@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import List from '../components/List';
-import { BoardMembershipRoles } from '../constants/Enums';
+import { BoardMembershipRoles, ListTypes } from '../constants/Enums';
 import entryActions from '../entry-actions';
 import selectors from '../selectors';
 
@@ -13,7 +13,7 @@ const makeMapStateToProps = () => {
   const selectFilteredCardIdsByListId = selectors.makeSelectFilteredCardIdsByListId();
 
   return (state, { id, index }) => {
-    const { name, isPersisted, isCollapsed, isCompleted, createdAt, createdBy, updatedAt, updatedBy, isActivitiesFetching, isAllActivitiesFetched, lastActivityId } = selectListById(state, id);
+    const { name, type, isPersisted, isCollapsed, isCompleted, createdAt, createdBy, updatedAt, updatedBy, isActivitiesFetching, isAllActivitiesFetched, lastActivityId } = selectListById(state, id);
     const cardIds = selectCardIdsByListId(state, id);
     const isFiltered = selectIsFilteredByListId(state, id);
     const filteredCardIds = selectFilteredCardIdsByListId(state, id);
@@ -40,7 +40,8 @@ const makeMapStateToProps = () => {
       filteredCardIds,
       boardLabels,
       boardMemberships,
-      canEdit: isCurrentUserEditor,
+      // Archive and trash lists are fixed: no renaming, adding cards or list actions
+      canEdit: isCurrentUserEditor && type === ListTypes.ACTIVE,
       createdAt,
       createdBy,
       updatedAt,

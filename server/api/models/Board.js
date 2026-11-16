@@ -40,6 +40,11 @@ module.exports = {
       required: true,
       columnName: 'is_imported_board',
     },
+    trashAutoEmptyDays: {
+      type: 'number',
+      allowNull: true,
+      columnName: 'trash_auto_empty_days',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

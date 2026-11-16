@@ -1,4 +1,24 @@
 :global(#app) {
+  .specialListBanner {
+    align-items: center;
+    background: var(--backgroundBase1);
+    border-radius: 4px;
+    color: var(--text1);
+    display: flex;
+    gap: 8px;
+    margin: 4px 0 8px;
+    padding: 6px 10px;
+  }
+
+  .specialListBannerText {
+    flex: 1;
+    font-size: 13px;
+  }
+
+  .specialListBannerButton {
+    width: auto;
+  }
+
   .addAttachmentButton {
     .hint {
       visibility: hidden;

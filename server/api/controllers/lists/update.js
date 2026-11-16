@@ -57,6 +57,11 @@ module.exports = {
       throw Errors.NOT_ENOUGH_RIGHTS;
     }
 
+    // Archive and trash lists are fixed parts of every board
+    if (sails.helpers.lists.isSpecial(list)) {
+      throw Errors.NOT_ENOUGH_RIGHTS;
+    }
+
     const values = _.pick(inputs, ['position', 'name', 'isCollapsed', 'isCompleted']);
 
     list = await sails.helpers.lists.updateOne.with({

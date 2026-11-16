@@ -76,6 +76,7 @@ module.exports.routes = {
   'POST /api/boards/:boardId/lists': 'lists/create',
   'PATCH /api/lists/:id': 'lists/update',
   'DELETE /api/lists/:id': 'lists/delete',
+  'POST /api/lists/:id/clear': 'lists/clear',
 
   'POST /api/lists/:listId/cards': 'cards/create',
   'GET /api/cards/:id': 'cards/show',

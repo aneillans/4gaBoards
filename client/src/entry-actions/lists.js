@@ -37,6 +37,13 @@ const moveList = (id, index) => ({
   },
 });
 
+const clearList = (id) => ({
+  type: EntryActionTypes.LIST_CLEAR,
+  payload: {
+    id,
+  },
+});
+
 const deleteList = (id) => ({
   type: EntryActionTypes.LIST_DELETE,
   payload: {
@@ -58,5 +65,6 @@ export default {
   handleListUpdate,
   moveList,
   deleteList,
+  clearList,
   handleListDelete,
 };

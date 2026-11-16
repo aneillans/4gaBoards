@@ -1,5 +1,6 @@
 import { createSelector } from 'redux-orm';
 
+import { ListTypes } from '../constants/Enums';
 import Paths from '../constants/Paths';
 import orm from '../orm';
 import getMeta from '../utils/get-meta';
@@ -7,6 +8,49 @@ import { isLocalId } from '../utils/local-id';
 import { sortByCurrentUserAndName, addBoardMemberships, addCardMemberships, addTaskMemberships } from '../utils/membership-helpers';
 import { selectPath } from './router';
 import { selectCurrentUserId } from './users';
+
+// Where a card stands with respect to the archive and trash: its list type, the board's archive and
+// trash list ids, and the list Restore sends it back to (its previous list, or the first normal list
+// when that is gone)
+export const makeSelectListContextByCardId = () =>
+  createSelector(
+    orm,
+    (_, id) => id,
+    ({ Card, List }, id) => {
+      const cardModel = Card.withId(id);
+
+      if (!cardModel || !cardModel.list || !cardModel.board) {
+        return null;
+      }
+
+      const { list: listModel, board: boardModel } = cardModel;
+      const archiveListModel = boardModel.getSpecialListModel(ListTypes.ARCHIVE);
+      const trashListModel = boardModel.getSpecialListModel(ListTypes.TRASH);
+
+      let restoreListModel = null;
+      if (listModel.isSpecial()) {
+        const prevListModel = cardModel.prevListId && List.withId(cardModel.prevListId);
+        const isPrevListUsable = prevListModel && prevListModel.boardId === boardModel.id && prevListModel.type !== ListTypes.TRASH;
+
+        restoreListModel = isPrevListUsable
+          ? prevListModel
+          : boardModel
+              .getOrderedListsQuerySet()
+              .toModelArray()
+              .find((model) => !model.isSpecial()) || null;
+      }
+
+      return {
+        listType: listModel.type,
+        archiveListId: archiveListModel ? archiveListModel.id : null,
+        trashListId: trashListModel ? trashListModel.id : null,
+        restoreListId: restoreListModel ? restoreListModel.id : null,
+        restoreListName: restoreListModel ? restoreListModel.name : null,
+      };
+    },
+  );
+
+export const selectListContextByCardId = makeSelectListContextByCardId();
 
 export const makeSelectCardById = () =>
   createSelector(
@@ -493,6 +537,8 @@ export const selectBoardAndTaskMembershipsForCurrentCard = createSelector(
 );
 
 export default {
+  makeSelectListContextByCardId,
+  selectListContextByCardId,
   makeSelectCardById,
   selectCardById,
   makeSelectUsersByCardId,

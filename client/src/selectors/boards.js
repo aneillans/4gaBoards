@@ -1,5 +1,6 @@
 import { createSelector } from 'redux-orm';
 
+import { ListTypes } from '../constants/Enums';
 import orm from '../orm';
 import getMeta from '../utils/get-meta';
 import { isLocalId } from '../utils/local-id';
@@ -239,12 +240,27 @@ export const selectListIdsForCurrentBoard = createSelector(
     const { hideCompletedLists } = boardMembershipModel;
 
     return boardModel
-      .getOrderedListsQuerySet()
-      .toRefArray()
-      .filter((list) => !hideCompletedLists || !list.isCompleted)
-      .map((list) => list.id);
+      .getOrderedContextListsModelArray()
+      .filter((listModel) => !hideCompletedLists || !listModel.isCompleted)
+      .map((listModel) => listModel.id);
   },
 );
+
+const makeSelectSpecialListIdForCurrentBoard = (type) =>
+  createSelector(
+    orm,
+    (state) => selectPath(state).boardId,
+    ({ Board }, id) => {
+      const boardModel = id && Board.withId(id);
+      const listModel = boardModel && boardModel.getSpecialListModel(type);
+
+      return listModel ? listModel.id : null;
+    },
+  );
+
+export const selectArchiveListIdForCurrentBoard = makeSelectSpecialListIdForCurrentBoard(ListTypes.ARCHIVE);
+
+export const selectTrashListIdForCurrentBoard = makeSelectSpecialListIdForCurrentBoard(ListTypes.TRASH);
 
 export const selectFilterUsersForCurrentBoard = createSelector(
   orm,
@@ -341,7 +357,7 @@ export const selectCardsCountForCurrentBoard = createSelector(
       return boardModel;
     }
 
-    const listModels = boardModel.getOrderedListsQuerySet().toModelArray();
+    const listModels = boardModel.getOrderedContextListsModelArray();
 
     const cardsCount = listModels.map((list) => list.getOrderedCardsQuerySet().count()).reduce((total, count) => total + count, 0);
 
@@ -363,7 +379,7 @@ export const selectFilteredCardsCountForCurrentBoard = createSelector(
       return boardModel;
     }
 
-    const listModels = boardModel.getOrderedListsQuerySet().toModelArray();
+    const listModels = boardModel.getOrderedContextListsModelArray();
 
     const filteredCardsCount = listModels.map((list) => list.getFilteredOrderedCardsModelArray().length).reduce((total, count) => total + count, 0);
     return filteredCardsCount;
@@ -413,6 +429,8 @@ export const makeSelectNotificationsTotalByBoardId = () =>
 export const selectNotificationsTotalByBoardId = makeSelectNotificationsTotalByBoardId();
 
 export default {
+  selectArchiveListIdForCurrentBoard,
+  selectTrashListIdForCurrentBoard,
   makeSelectBoardById,
   selectBoardById,
   selectCurrentBoard,

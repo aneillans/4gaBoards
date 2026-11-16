@@ -11,6 +11,7 @@ export default function* listsWatchers() {
     takeEvery(EntryActionTypes.LIST_UPDATE_HANDLE, ({ payload: { list } }) => services.handleListUpdate(list)),
     takeEvery(EntryActionTypes.LIST_MOVE, ({ payload: { id, index } }) => services.moveList(id, index)),
     takeEvery(EntryActionTypes.LIST_DELETE, ({ payload: { id } }) => services.deleteList(id)),
+    takeEvery(EntryActionTypes.LIST_CLEAR, ({ payload: { id } }) => services.clearList(id)),
     takeEvery(EntryActionTypes.LIST_DELETE_HANDLE, ({ payload: { list } }) => services.handleListDelete(list)),
   ]);
 }

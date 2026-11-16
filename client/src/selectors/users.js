@@ -222,7 +222,12 @@ export const selectProjectsToListsForCurrentUser = createSelector(
       ...projectModel.ref,
       boards: projectModel.getOrderedBoardsModelArrayForUser(id).map((boardModel) => ({
         ...boardModel.ref,
-        lists: boardModel.getOrderedListsQuerySet().toRefArray(),
+        // Move targets: archive and trash are reached through their own card actions
+        lists: boardModel
+          .getOrderedListsQuerySet()
+          .toModelArray()
+          .filter((listModel) => !listModel.isSpecial())
+          .map((listModel) => listModel.ref),
       })),
     }));
   },

@@ -95,6 +95,31 @@ export function* deleteList(id) {
   yield put(actions.deleteList.success(list));
 }
 
+// Empties the trash. Not optimistic: cards leave the store only once the server has deleted them,
+// since the server leaves the requester out of the per-card delete broadcasts.
+export function* clearList(id) {
+  const { cardId, boardId } = yield select(selectors.selectPath);
+
+  if (cardId) {
+    const card = yield select(selectors.selectCardById, cardId);
+
+    if (card && card.listId === id) {
+      yield call(goToBoard, boardId);
+    }
+  }
+
+  yield put(actions.clearList(id));
+
+  try {
+    yield call(request, api.clearList, id);
+  } catch (error) {
+    yield put(actions.clearList.failure(id, error));
+    return;
+  }
+
+  yield put(actions.clearList.success(id));
+}
+
 export function* handleListDelete(list) {
   const { cardId, boardId } = yield select(selectors.selectPath);
 
@@ -110,6 +135,7 @@ export function* handleListDelete(list) {
 }
 
 export default {
+  clearList,
   createList,
   createListInCurrentBoard,
   handleListCreate,

@@ -8,14 +8,17 @@ import { Dropdown, DropdownVariant } from '../../../Utils';
 import * as gs from '../../../../global.module.scss';
 import * as s from './ListNameCell.module.scss';
 
-const ListNameCell = React.memo(({ cellClassName, projectId, boardId, listId, allProjectsToLists, canEdit, onMove }) => {
+const ListNameCell = React.memo(({ cellClassName, projectId, boardId, listId, allProjectsToLists, specialListName, canEdit, onMove }) => {
   const [t] = useTranslation();
   const dropdown = useRef(null);
 
   const selectedProject = useMemo(() => allProjectsToLists.find((project) => project.id === projectId) || null, [allProjectsToLists, projectId]);
   const selectedBoard = useMemo(() => (selectedProject && selectedProject.boards.find((board) => board.id === boardId)) || null, [selectedProject, boardId]);
   const selectedList = useMemo(() => (selectedBoard && selectedBoard.lists.find((list) => list.id === listId)) || null, [selectedBoard, listId]);
-  const selectedListName = useMemo(() => (selectedList?.name?.startsWith('common.') ? t(selectedList.name) : selectedList?.name), [selectedList, t]);
+  const selectedListName = useMemo(() => {
+    const name = selectedList?.name ?? specialListName;
+    return name?.startsWith('common.') ? t(name) : name;
+  }, [selectedList, specialListName, t]);
 
   const handleDropdownClick = useCallback(() => {
     if (canEdit) {
@@ -51,6 +54,7 @@ const ListNameCell = React.memo(({ cellClassName, projectId, boardId, listId, al
 });
 
 ListNameCell.propTypes = {
+  specialListName: PropTypes.string,
   cellClassName: PropTypes.string,
   listId: PropTypes.string.isRequired,
   boardId: PropTypes.string.isRequired,
@@ -61,6 +65,7 @@ ListNameCell.propTypes = {
 };
 
 ListNameCell.defaultProps = {
+  specialListName: null,
   cellClassName: '',
 };
 

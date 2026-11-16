@@ -24,6 +24,7 @@ const mapStateToProps = (state) => {
   const { id, isSubscribed, hideCompletedLists } = currentUserMembership ?? {};
   const isCurrentUserEditor = !!currentUserMembership && currentUserMembership.role === BoardMembershipRoles.EDITOR;
   const currentBoard = selectors.selectCurrentBoard(state);
+  const trashListId = selectors.selectTrashListIdForCurrentBoard(state);
   const board = {
     ...currentBoard,
     activities: selectors.selectBoardActivitiesById(state, currentBoard.id),
@@ -58,6 +59,7 @@ const mapStateToProps = (state) => {
     mailTokenCount,
     mailServiceAvailable,
     mailServiceInboundEmail,
+    trashListId,
   };
 };
 
@@ -82,6 +84,8 @@ const mapDispatchToProps = (dispatch, ownProps) =>
       onBoardDelete: entryActions.deleteBoard,
       onBoardExport: entryActions.exportBoard,
       onBoardSearchParamsUpdate: (searchParams) => entryActions.updateBoardSearchParams(ownProps.boardId, searchParams),
+      onContextChange: (context) => entryActions.updateBoardContext(ownProps.boardId, context),
+      onTrashEmpty: entryActions.clearList,
       onActivitiesFetch: () => entryActions.fetchBoardActivities(ownProps.boardId),
       onMailTokenCreate: () => entryActions.createMailToken({ boardId: ownProps.boardId }),
       onMailTokenUpdate: (mailTokenId) => entryActions.updateMailToken(mailTokenId, { boardId: ownProps.boardId }),

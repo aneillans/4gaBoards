@@ -3,6 +3,7 @@ import { ReactComponent as AddressCard } from '../../../assets/icons/AddressCard
 import { ReactComponent as AngleLeft } from '../../../assets/icons/AngleLeft.svg';
 import { ReactComponent as AngleLeftDouble } from '../../../assets/icons/AngleLeftDouble.svg';
 import { ReactComponent as AnyMatch } from '../../../assets/icons/AnyMatch.svg';
+import { ReactComponent as Archive } from '../../../assets/icons/Archive.svg';
 import { ReactComponent as ArrowDown } from '../../../assets/icons/ArrowDown.svg';
 import { ReactComponent as ArrowLeftBig } from '../../../assets/icons/ArrowLeftBig.svg';
 import { ReactComponent as ArrowRight } from '../../../assets/icons/ArrowRight.svg';
@@ -72,6 +73,7 @@ import { ReactComponent as Youtube } from '../../../assets/icons/Youtube.svg';
 const IconType = {
   Activity,
   AddressCard,
+  Archive,
   AngleLeft,
   AngleLeftDouble,
   AnyMatch,

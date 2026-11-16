@@ -5,7 +5,19 @@
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
  */
 
+const Types = {
+  ACTIVE: 'active',
+  ARCHIVE: 'archive',
+  TRASH: 'trash',
+};
+
+// Every board has exactly one archive and one trash list, hidden from the normal board views
+const SPECIAL_TYPES = [Types.ARCHIVE, Types.TRASH];
+
 module.exports = {
+  Types,
+  SPECIAL_TYPES,
+
   attributes: {
     //  ╔═╗╦═╗╦╔╦╗╦╔╦╗╦╦  ╦╔═╗╔═╗
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
@@ -28,6 +40,11 @@ module.exports = {
       type: 'boolean',
       defaultsTo: false,
       columnName: 'is_completed',
+    },
+    type: {
+      type: 'string',
+      isIn: Object.values(Types),
+      defaultsTo: Types.ACTIVE,
     },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗

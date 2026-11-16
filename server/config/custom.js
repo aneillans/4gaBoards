@@ -136,6 +136,7 @@ module.exports.custom = {
   cacheMaxAge: 900,
   actionsLimit: 50,
   commentsLimit: 50,
+  trashAutoEmptyCronSchedule: process.env.TRASH_AUTO_EMPTY_CRON_SCHEDULE || '17 * * * *',
   notificationsCronSchedule: process.env.NODE_ENV === 'production' ? '*/5 * * * *' : '*/1 * * * *',
   notificationsMailBatchIntervalMs: process.env.NODE_ENV === 'production' ? 10 * 60 * 1000 : 1 * 60 * 1000,
   emailVerificationCooldownMs: 60 * 1000,
