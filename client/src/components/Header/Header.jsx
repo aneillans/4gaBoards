@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 import logo from '../../assets/images/4gaLogo512w.png';
 import Paths from '../../constants/Paths';
+import { isPublicView } from '../../utils/public-board';
 import User from '../User';
 import UserPopup from '../UserPopup';
 import { Button, ButtonVariant, Icon, IconType, IconSize, ExternalLink } from '../Utils';
@@ -69,6 +70,30 @@ const Header = React.memo(
           return project ? project.name : null;
       }
     }, [path, project, t]);
+
+    // Anonymous visitors of a public board leave the public routes with a full page load, so the
+    // signed-in app (or the login page) starts fresh
+    if (isPublicView()) {
+      return (
+        <div className={s.wrapper}>
+          <a href={Paths.ROOT} className={s.logo}>
+            <Button variant={ButtonVariant.HeaderLogo} title="4ga Boards">
+              <img src={logo} alt="4ga Boards" className={s.logoIcon} />
+            </Button>
+          </a>
+          <div className={s.title} title={getPageHeaderTitle()}>
+            {getPageHeaderTitle()}
+          </div>
+          <div className={s.menuRight}>
+            <a href={Paths.LOGIN}>
+              <Button variant={ButtonVariant.Header} title={t('common.logIn')}>
+                <Icon type={IconType.User} size={IconSize.Size18} />
+              </Button>
+            </a>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className={s.wrapper}>

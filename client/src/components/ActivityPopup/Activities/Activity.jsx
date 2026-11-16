@@ -4,6 +4,7 @@ import { ActivityScopes } from '@4gaboards/enums';
 import PropTypes from 'prop-types';
 
 import Paths from '../../../constants/Paths';
+import { getBoardPath, isPublicView } from '../../../utils/public-board';
 import ActivityLabel from '../../ActivityLabel';
 import ActivityLink from '../../ActivityLink';
 import ActivityMessage from '../../ActivityMessage';
@@ -37,7 +38,7 @@ const Activity = React.memo(({ activity, createdAt, memberships, hideCardDetails
         <ActivityLink
           activityTarget={activity.board}
           isVisible={boardLinkVisible}
-          to={Paths.BOARDS.replace(':id', activity.board?.id || activity.boardId)}
+          to={getBoardPath(activity.board?.id || activity.boardId)}
           toAvailable={Boolean(activity.board || activity.boardId)}
           icon={IconType.Board}
           titleNotAvailable={t('activity.noBoardAvailable')}
@@ -48,7 +49,7 @@ const Activity = React.memo(({ activity, createdAt, memberships, hideCardDetails
           activityTarget={activity.project}
           isVisible={projectLinkVisible}
           to={Paths.PROJECTS.replace(':id', activity.project?.id || activity.projectId)}
-          toAvailable={Boolean(activity.project || activity.projectId)}
+          toAvailable={!isPublicView() && Boolean(activity.project || activity.projectId)}
           icon={IconType.Project}
           titleNotAvailable={t('activity.noProjectAvailable')}
           className={s.project}

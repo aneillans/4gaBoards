@@ -5,6 +5,7 @@ import { getActivityTransProps } from '@4gaboards/locales/renderer';
 import PropTypes from 'prop-types';
 
 import Paths from '../../constants/Paths';
+import { getBoardPath, getCardPath, isPublicView } from '../../utils/public-board';
 import { ExternalLink } from '../Utils';
 
 import * as s from './ActivityMessage.module.scss';
@@ -52,6 +53,8 @@ const ActivityMessage = React.memo(({ activity, isTruncated, hideCardDetails, hi
 
     if (slot === 'user') {
       node = <span className={s.data} title={title} style={style} />;
+    } else if (slot === 'project' && isPublicView()) {
+      node = <span className={s.data} title={title} style={style} />;
     } else if (slot === 'project') {
       if (activity.project) {
         node = <Link to={Paths.PROJECTS.replace(':id', activity.project.id)} className={s.linked} title={title} onClick={onClose} style={style} />;
@@ -60,15 +63,15 @@ const ActivityMessage = React.memo(({ activity, isTruncated, hideCardDetails, hi
       }
     } else if (slot === 'card') {
       if (activity.card) {
-        node = <Link to={Paths.CARDS.replace(':id', activity.card.id)} className={s.linked} title={title} onClick={onClose} style={style} />;
+        node = <Link to={getCardPath(activity.card.id)} className={s.linked} title={title} onClick={onClose} style={style} />;
       } else {
-        node = <Link to={Paths.CARDS.replace(':id', activity.cardId)} className={s.linkedDeleted} title={t('activity.deletedCard', { card: title })} onClick={onClose} style={style} />;
+        node = <Link to={getCardPath(activity.cardId)} className={s.linkedDeleted} title={t('activity.deletedCard', { card: title })} onClick={onClose} style={style} />;
       }
     } else if (slot === 'board') {
       if (activity.board) {
-        node = <Link to={Paths.BOARDS.replace(':id', activity.board.id)} className={s.linked} title={title} onClick={onClose} style={style} />;
+        node = <Link to={getBoardPath(activity.board.id)} className={s.linked} title={title} onClick={onClose} style={style} />;
       } else {
-        node = <Link to={Paths.BOARDS.replace(':id', activity.boardId)} className={s.linkedDeleted} title={t('activity.deletedBoard', { board: title })} onClick={onClose} style={style} />;
+        node = <Link to={getBoardPath(activity.boardId)} className={s.linkedDeleted} title={t('activity.deletedBoard', { board: title })} onClick={onClose} style={style} />;
       }
     } else if (slot.toLowerCase().includes('mail')) {
       if (title) {

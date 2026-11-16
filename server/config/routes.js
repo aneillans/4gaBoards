@@ -55,6 +55,11 @@ module.exports.routes = {
   'POST /api/projects/:projectId/boards': 'boards/create',
   'GET /api/boards/:id': 'boards/show',
   'PATCH /api/boards/:id': 'boards/update',
+
+  'GET /api/public-boards/:publicId': 'public-boards/show',
+  'GET /api/public-boards/:publicId/actions': 'public-boards/index-actions',
+  'GET /api/public-boards/:publicId/cards/:cardId/actions': 'public-boards/index-card-actions',
+  'GET /api/public-boards/:publicId/cards/:cardId/comments': 'public-boards/index-card-comments',
   'DELETE /api/boards/:id': 'boards/delete',
   'GET /api/boards/:id/export': 'boards/export',
   'POST /api/boards/:boardId/labels/find-by-name': 'boards/find-label-by-name',
@@ -138,6 +143,16 @@ module.exports.routes = {
 
   'GET /attachments/:id/download/thumbnails/cover-256.:extension': {
     action: 'attachments/download-thumbnail',
+    skipAssets: false,
+  },
+
+  'GET /public-boards/:publicId/attachments/:id/download/:filename': {
+    action: 'public-boards/download-attachment',
+    skipAssets: false,
+  },
+
+  'GET /public-boards/:publicId/attachments/:id/download/thumbnails/cover-256.:extension': {
+    action: 'public-boards/download-attachment-thumbnail',
     skipAssets: false,
   },
 

@@ -1,10 +1,10 @@
 import { createSelector } from 'redux-orm';
 
-import Paths from '../constants/Paths';
 import orm from '../orm';
 import getMeta from '../utils/get-meta';
 import { isLocalId } from '../utils/local-id';
 import { sortByCurrentUserAndName, addBoardMemberships, addCardMemberships, addTaskMemberships } from '../utils/membership-helpers';
+import { getCardPath } from '../utils/public-board';
 import { selectPath } from './router';
 import { selectCurrentUserId } from './users';
 
@@ -393,7 +393,7 @@ export const selectUrlForCard = createSelector(
     }
 
     const { origin } = window.location;
-    const cardPath = Paths.CARDS.replace(':id', id);
+    const cardPath = getCardPath(id);
     const url = `${origin}${cardPath}`;
 
     return url;

@@ -4,6 +4,7 @@ import actions from '../../actions';
 import ErrorCodes from '../../constants/ErrorCodes';
 import selectors from '../../selectors';
 import { removeAccessToken } from '../../utils/access-token-storage';
+import { isPublicView } from '../../utils/public-board';
 
 let lastRequestTask;
 
@@ -32,6 +33,12 @@ function* queueRequest(method, ...args) {
 }
 
 export default function* request(method, ...args) {
+  // Anonymous visitors of a public board have no access token. Failing here keeps every mutation
+  // read-only and stops a 401 from triggering the logout flow.
+  if (isPublicView()) {
+    throw new Error('Not available on a public board');
+  }
+
   lastRequestTask = yield fork(queueRequest, method, ...args);
 
   return yield join(lastRequestTask);

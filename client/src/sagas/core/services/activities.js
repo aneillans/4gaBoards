@@ -3,6 +3,7 @@ import { call, put, select } from 'redux-saga/effects';
 import actions from '../../../actions';
 import api from '../../../api';
 import selectors from '../../../selectors';
+import { getPublicBoardId, isPublicView } from '../../../utils/public-board';
 import request from '../request';
 
 export function* fetchAttachmentActivities(attachmentId) {
@@ -80,7 +81,7 @@ export function* fetchCardActivities(cardId) {
     ({
       items: activities,
       included: { users },
-    } = yield call(request, api.getCardActivities, cardId, { beforeId: lastId }));
+    } = yield isPublicView() ? call(api.getPublicCardActivities, getPublicBoardId(), cardId, { beforeId: lastId }) : call(request, api.getCardActivities, cardId, { beforeId: lastId }));
   } catch (error) {
     yield put(actions.fetchCardActivities.failure(cardId, error));
     return;
@@ -128,7 +129,7 @@ export function* fetchBoardActivities(boardId) {
     ({
       items: activities,
       included: { users },
-    } = yield call(request, api.getBoardActivities, boardId, { beforeId: lastId }));
+    } = yield isPublicView() ? call(api.getPublicBoardActivities, getPublicBoardId(), { beforeId: lastId }) : call(request, api.getBoardActivities, boardId, { beforeId: lastId }));
   } catch (error) {
     yield put(actions.fetchBoardActivities.failure(boardId, error));
     return;

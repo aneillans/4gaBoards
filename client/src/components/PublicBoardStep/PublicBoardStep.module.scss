@@ -1,0 +1,25 @@
+:global(#app) {
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+  }
+
+  .checkboxWrapper {
+    margin: 6px 0 4px;
+  }
+
+  .subheader {
+    margin: 8px 0 2px;
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .indented {
+    margin: 4px 0 2px 12px;
+  }
+
+  .copyButton {
+    width: auto;
+  }
+}

@@ -236,7 +236,7 @@ export const selectListIdsForCurrentBoard = createSelector(
     }
 
     const boardMembershipModel = boardModel.getMembershipModelForUser(currentUserId);
-    const { hideCompletedLists } = boardMembershipModel;
+    const { hideCompletedLists } = boardMembershipModel ?? {};
 
     return boardModel
       .getOrderedListsQuerySet()

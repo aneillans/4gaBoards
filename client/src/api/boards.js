@@ -32,6 +32,23 @@ const getBoard = (id, subscribe, headers) =>
     },
   }));
 
+// Anonymous visitors of a public board have no socket connection, so this goes over plain HTTP
+const getPublicBoard = (publicId, headers) =>
+  http.get(`/public-boards/${encodeURIComponent(publicId)}`, undefined, headers).then((body) => ({
+    ...body,
+    // GitHub details are member-only and never sent publicly
+    item: { isGithubConnected: false, githubRepo: '', ...transformBoard(body.item) },
+    included: {
+      ...body.included,
+      cards: body.included.cards.map(transformCard),
+      attachments: body.included.attachments.map(transformAttachment),
+      tasks: body.included.tasks.map(transformTask),
+      users: body.included.users.map(transformUser),
+      lists: body.included.lists.map(transformList),
+      projects: body.included.projects.map(transformProject),
+    },
+  }));
+
 const updateBoard = (id, data, headers) =>
   socket.patch(`/boards/${id}`, data, headers).then((body) => ({
     ...body,
@@ -63,6 +80,7 @@ export default {
   createBoard,
   createBoardWithImport,
   getBoard,
+  getPublicBoard,
   updateBoard,
   deleteBoard,
   exportBoard,

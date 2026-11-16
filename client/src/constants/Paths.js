@@ -10,6 +10,8 @@ const OIDC_CALLBACK = `${Config.BASE_PATH}/oidc-callback`;
 const PROJECTS = `${Config.BASE_PATH}/projects/:id`;
 const BOARDS = `${Config.BASE_PATH}/boards/:id`;
 const CARDS = `${Config.BASE_PATH}/cards/:id`;
+const PUBLIC_BOARDS = `${Config.BASE_PATH}/public-boards/:publicId`;
+const PUBLIC_CARDS = `${Config.BASE_PATH}/public-boards/:publicId/cards/:id`;
 const SETTINGS = `${Config.BASE_PATH}/settings`;
 const SETTINGS_PROFILE = `${Config.BASE_PATH}/settings/profile`;
 const SETTINGS_PREFERENCES = `${Config.BASE_PATH}/settings/preferences`;
@@ -33,6 +35,8 @@ export default {
   PROJECTS,
   BOARDS,
   CARDS,
+  PUBLIC_BOARDS,
+  PUBLIC_CARDS,
   SETTINGS,
   SETTINGS_PROFILE,
   SETTINGS_PREFERENCES,

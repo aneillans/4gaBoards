@@ -21,7 +21,7 @@ const mapStateToProps = (state) => {
   const filterUsers = selectors.selectFilterUsersForCurrentBoard(state);
   const filterLabels = selectors.selectFilterLabelsForCurrentBoard(state);
   const currentUserMembership = selectors.selectCurrentUserMembershipForCurrentBoard(state);
-  const { id, isSubscribed, hideCompletedLists } = currentUserMembership ?? {};
+  const { id = '', isSubscribed = false, hideCompletedLists = false } = currentUserMembership ?? {};
   const isCurrentUserEditor = !!currentUserMembership && currentUserMembership.role === BoardMembershipRoles.EDITOR;
   const currentBoard = selectors.selectCurrentBoard(state);
   const board = {

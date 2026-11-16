@@ -1,3 +1,4 @@
+import http from './http';
 import socket from './socket';
 import { transformComment } from './transformers';
 
@@ -5,6 +6,12 @@ import { transformComment } from './transformers';
 
 const getCardComments = (cardId, data, headers) =>
   socket.get(`/cards/${cardId}/comments`, data, headers).then((body) => ({
+    ...body,
+    items: body.items.map(transformComment),
+  }));
+
+const getPublicCardComments = (publicId, cardId, data, headers) =>
+  http.get(`/public-boards/${encodeURIComponent(publicId)}/cards/${cardId}/comments${data.beforeId ? `?beforeId=${data.beforeId}` : ''}`, undefined, headers).then((body) => ({
     ...body,
     items: body.items.map(transformComment),
   }));
@@ -43,6 +50,7 @@ const makeHandleCommentDelete = makeHandleCommentCreate;
 
 export default {
   getCardComments,
+  getPublicCardComments,
   createComment,
   createCommentMention,
   updateComment,

@@ -1,3 +1,4 @@
+import http from './http';
 import socket from './socket';
 import { transformActivity, transformUser } from './transformers';
 
@@ -47,6 +48,20 @@ const getListActivities = (listId, data, headers) =>
       users: body.included.users.map(transformUser),
     },
   }));
+
+const transformPublicActivities = (body) => ({
+  ...body,
+  items: body.items.map(transformActivity),
+  included: {
+    users: body.included.users.map(transformUser),
+  },
+});
+
+const getPublicCardActivities = (publicId, cardId, data, headers) =>
+  http.get(`/public-boards/${encodeURIComponent(publicId)}/cards/${cardId}/actions${data.beforeId ? `?beforeId=${data.beforeId}` : ''}`, undefined, headers).then(transformPublicActivities);
+
+const getPublicBoardActivities = (publicId, data, headers) =>
+  http.get(`/public-boards/${encodeURIComponent(publicId)}/actions${data.beforeId ? `?beforeId=${data.beforeId}` : ''}`, undefined, headers).then(transformPublicActivities);
 
 const getBoardActivities = (boardId, data, headers) =>
   socket.get(`/boards/${boardId}/actions`, data, headers).then((body) => ({
@@ -107,8 +122,10 @@ export default {
   getCommentActivities,
   getTaskActivities,
   getCardActivities,
+  getPublicCardActivities,
   getListActivities,
   getBoardActivities,
+  getPublicBoardActivities,
   getProjectActivities,
   getUserActivities,
   getUserAccountActivities,

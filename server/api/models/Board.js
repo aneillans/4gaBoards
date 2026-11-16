@@ -40,6 +40,31 @@ module.exports = {
       required: true,
       columnName: 'is_imported_board',
     },
+    isPublic: {
+      type: 'boolean',
+      columnName: 'is_public',
+    },
+    publicId: {
+      type: 'string',
+      allowNull: true,
+      columnName: 'public_id',
+    },
+    publicShowMembers: {
+      type: 'boolean',
+      columnName: 'public_show_members',
+    },
+    publicShowComments: {
+      type: 'boolean',
+      columnName: 'public_show_comments',
+    },
+    publicShowActivity: {
+      type: 'boolean',
+      columnName: 'public_show_activity',
+    },
+    publicShowAttachments: {
+      type: 'boolean',
+      columnName: 'public_show_attachments',
+    },
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
