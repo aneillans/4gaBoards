@@ -12,7 +12,7 @@ export default function* tasksWatchers() {
     takeEvery(EntryActionTypes.TASK_UPDATE_HANDLE, ({ payload: { task } }) => services.handleTaskUpdate(task)),
     takeEvery(EntryActionTypes.TASK_DUPLICATE, ({ payload: { id } }) => services.duplicateTask(id)),
     takeEvery(EntryActionTypes.TASK_DUPLICATE_HANDLE, ({ payload: { task } }) => services.handleTaskDuplicate(task)),
-    takeEvery(EntryActionTypes.TASK_MOVE, ({ payload: { id, index } }) => services.moveTask(id, index)),
+    takeEvery(EntryActionTypes.TASK_MOVE, ({ payload: { id, index, taskListId } }) => services.moveTask(id, index, taskListId)),
     takeEvery(EntryActionTypes.TASK_DELETE, ({ payload: { id } }) => services.deleteTask(id)),
     takeEvery(EntryActionTypes.TASK_DELETE_HANDLE, ({ payload: { task } }) => services.handleTaskDelete(task)),
   ]);

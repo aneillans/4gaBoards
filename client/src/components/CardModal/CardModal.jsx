@@ -18,7 +18,7 @@ import DueDateEditPopup from '../DueDateEditPopup';
 import Label from '../Label';
 import LabelsPopup from '../LabelsPopup';
 import MembershipsPopup from '../MembershipsPopup';
-import Tasks from '../Tasks';
+import TaskLists from '../TaskLists';
 import Timer from '../Timer';
 import TimerEditPopup from '../TimerEditPopup';
 import User from '../User';
@@ -55,6 +55,7 @@ const CardModal = React.memo(
     users,
     labels,
     tasks,
+    taskLists,
     attachments,
     comments,
     activities,
@@ -110,6 +111,9 @@ const CardModal = React.memo(
     onLabelUpdate,
     onLabelDelete,
     onTaskCreate,
+    onTaskListCreate,
+    onTaskListUpdate,
+    onTaskListDelete,
     onTaskUpdate,
     onTaskDuplicate,
     onTaskMove,
@@ -799,12 +803,14 @@ const CardModal = React.memo(
         </div>
         <div>
           {taskShown && (
-            <Tasks
+            <TaskLists
               ref={tasksRef}
-              variant="cardModal"
               cardId={id}
               cardName={name}
-              items={tasks}
+              taskLists={taskLists}
+              onTaskListCreate={onTaskListCreate}
+              onTaskListUpdate={onTaskListUpdate}
+              onTaskListDelete={onTaskListDelete}
               showFullDueDates={showFullDueDates}
               rightClickContextMenu={rightClickContextMenu}
               selfAssignBySpacebar={selfAssignBySpacebar}
@@ -812,9 +818,9 @@ const CardModal = React.memo(
               canEdit={canEdit}
               allBoardMemberships={boardAndTaskMemberships}
               boardMemberships={boardMemberships}
-              onCreate={onTaskCreate}
+              onTaskCreate={onTaskCreate}
               onUpdate={onTaskUpdate}
-              onMove={onTaskMove}
+              onTaskMove={onTaskMove}
               onDuplicate={onTaskDuplicate}
               onDelete={onTaskDelete}
               onUserAdd={onUserToTaskAdd}
@@ -961,6 +967,7 @@ CardModal.propTypes = {
   users: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   labels: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   tasks: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  taskLists: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   attachments: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   comments: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   activities: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -1016,6 +1023,9 @@ CardModal.propTypes = {
   onLabelUpdate: PropTypes.func.isRequired,
   onLabelDelete: PropTypes.func.isRequired,
   onTaskCreate: PropTypes.func.isRequired,
+  onTaskListCreate: PropTypes.func.isRequired,
+  onTaskListUpdate: PropTypes.func.isRequired,
+  onTaskListDelete: PropTypes.func.isRequired,
   onTaskUpdate: PropTypes.func.isRequired,
   onTaskDuplicate: PropTypes.func.isRequired,
   onTaskMove: PropTypes.func.isRequired,

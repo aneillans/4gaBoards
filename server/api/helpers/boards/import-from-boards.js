@@ -50,7 +50,7 @@ module.exports = {
   async fn(inputs) {
     const { currentUser } = inputs;
 
-    const { projectManagers, boardMemberships, lists, cards, comments, cardMemberships, actions, attachments, cardLabels, cardSubscriptions, labels, tasks, taskMemberships, users, boards } =
+    const { projectManagers, boardMemberships, lists, cards, comments, cardMemberships, actions, attachments, cardLabels, cardSubscriptions, labels, taskLists, tasks, taskMemberships, users, boards } =
       await sails.helpers.utils.loadCsvs.with({
         loadDir: inputs.importTempDir,
         filesToLoad: [
@@ -65,12 +65,13 @@ module.exports = {
           'cardLabels',
           'cardSubscriptions',
           'labels',
+          'taskLists',
           'tasks',
           'taskMemberships',
           'users',
           'boards',
         ],
-        optionalFiles: ['comments'],
+        optionalFiles: ['comments', 'taskLists'],
       });
 
     if (inputs.importGettingStartedProject) {
@@ -420,13 +421,43 @@ module.exports = {
       });
     };
 
+    // Exports from before task lists have none; their tasks go into one default list per card
+    const importTaskLists = async (newCard, card, tasksToImport) => {
+      const parseBoolean = (value, fallback) => (value === undefined || value === '' ? fallback : value === true || value === 'true');
+      const taskListsToImport = taskLists.filter((taskList) => taskList.cardId === card.id);
+
+      const taskListRecords = taskListsToImport.map((taskList) => ({
+        cardId: newCard.id,
+        position: taskList.position,
+        name: taskList.name,
+        showOnFrontOfCard: parseBoolean(taskList.showOnFrontOfCard, true),
+        hideCompletedTasks: parseBoolean(taskList.hideCompletedTasks, false),
+        createdAt: parseJSON(taskList.createdAt),
+        createdById: allUsers[taskList.createdById]?.id ?? currentUser.id,
+      }));
+
+      if (taskListRecords.length === 0 && tasksToImport.length > 0) {
+        taskListRecords.push({ cardId: newCard.id, position: sails.config.custom.positionGap, name: 'common.tasks', createdById: currentUser.id });
+      }
+
+      const insertedTaskLists = taskListRecords.length > 0 ? await TaskList.createEach(taskListRecords).fetch() : [];
+      const newTaskListIdByOldId = {};
+      taskListsToImport.forEach((taskList, i) => {
+        newTaskListIdByOldId[taskList.id] = insertedTaskLists[i].id;
+      });
+
+      return (task) => newTaskListIdByOldId[task.taskListId] ?? insertedTaskLists[0]?.id ?? null;
+    };
+
     const importTasks = async (newCard, card) => {
       const tasksToImport = getTasksOfCard(card.id);
+      const getNewTaskListId = await importTaskLists(newCard, card, tasksToImport);
 
       const taskRecords = tasksToImport.map((task) => {
         const updatedAt = parseJSON(task.updatedAt);
         return {
           cardId: newCard.id,
+          taskListId: getNewTaskListId(task),
           position: task.position,
           name: task.name,
           isCompleted: task.isCompleted,

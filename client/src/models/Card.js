@@ -279,6 +279,23 @@ export default class extends BaseModel {
     return this.tasks.orderBy('position');
   }
 
+  getOrderedTaskListsQuerySet() {
+    return this.taskLists.orderBy('position');
+  }
+
+  // Tasks shown on the card itself and in the list view: those of task lists marked to show on the
+  // front of the card, in task list order. Completed tasks still count towards progress here; hiding
+  // them only applies inside the card modal.
+  getOrderedFrontTasksModelArray() {
+    const taskListModels = this.getOrderedTaskListsQuerySet().toModelArray();
+    const listedTaskModels = taskListModels.filter((taskListModel) => taskListModel.showOnFrontOfCard).flatMap((taskListModel) => taskListModel.getOrderedTasksQuerySet().toModelArray());
+    const unlistedTaskModels = this.getOrderedTasksQuerySet()
+      .toModelArray()
+      .filter((taskModel) => !taskModel.taskListId || !taskModel.taskList);
+
+    return [...listedTaskModels, ...unlistedTaskModels];
+  }
+
   getOrderedAttachmentsQuerySet() {
     return this.attachments.orderBy('createdAt', true);
   }

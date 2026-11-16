@@ -4,6 +4,30 @@ import orm from '../orm';
 import getMeta from '../utils/get-meta';
 import { selectCurrentUserId } from './users';
 
+export const makeSelectTaskListById = () =>
+  createSelector(
+    orm,
+    (_, id) => id,
+    ({ TaskList }, id) => {
+      const taskListModel = TaskList.withId(id);
+
+      return taskListModel ? taskListModel.ref : taskListModel;
+    },
+  );
+
+export const selectTaskListById = makeSelectTaskListById();
+
+export const selectFirstTaskListIdByCardId = createSelector(
+  orm,
+  (_, cardId) => cardId,
+  ({ Card }, cardId) => {
+    const cardModel = Card.withId(cardId);
+    const taskListModel = cardModel && cardModel.getOrderedTaskListsQuerySet().first();
+
+    return taskListModel ? taskListModel.id : null;
+  },
+);
+
 export const makeSelectTaskById = () =>
   createSelector(
     orm,
@@ -47,6 +71,9 @@ export const makeSelectUsersForTaskById = () =>
 export const selectUsersForTaskById = makeSelectUsersForTaskById();
 
 export default {
+  selectFirstTaskListIdByCardId,
+  makeSelectTaskListById,
+  selectTaskListById,
   makeSelectTaskById,
   selectTaskById,
   makeSelectUsersForTaskById,

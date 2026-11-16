@@ -14,7 +14,8 @@ import Notification from './Notification';
 import Project from './Project';
 import ProjectManager from './ProjectManager';
 import Task from './Task';
+import TaskList from './TaskList';
 import User from './User';
 import UserPrefs from './UserPrefs';
 
-export { Activity, ApiClient, Attachment, Board, BoardMembership, BoardTemplate, Card, Comment, Core, Label, List, MailToken, Notification, Project, ProjectManager, Task, User, UserPrefs };
+export { Activity, ApiClient, Attachment, Board, BoardMembership, BoardTemplate, Card, Comment, Core, Label, List, MailToken, Notification, Project, ProjectManager, Task, TaskList, User, UserPrefs };

@@ -28,6 +28,7 @@ export function* fetchCore() {
   let cardMemberships;
   let cardLabels;
   let tasks;
+  let taskLists;
   let taskMemberships;
   let attachments;
 
@@ -45,6 +46,7 @@ export function* fetchCore() {
       cardMemberships,
       cardLabels,
       tasks,
+      taskLists,
       taskMemberships,
       attachments,
     } = yield call(fetchBoardByCurrentPath));
@@ -91,6 +93,7 @@ export function* fetchCore() {
     cardMemberships,
     cardLabels,
     tasks,
+    taskLists,
     taskMemberships,
     attachments,
     activities,

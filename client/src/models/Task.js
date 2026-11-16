@@ -16,6 +16,11 @@ export default class extends BaseModel {
     }),
     completedAt: attr(),
     dueDate: attr(),
+    taskListId: fk({
+      to: 'TaskList',
+      as: 'taskList',
+      relatedName: 'tasks',
+    }),
     cardId: fk({
       to: 'Card',
       as: 'card',

@@ -197,14 +197,19 @@ export const selectNextTaskPosition = createSelector(
   (_, cardId) => cardId,
   (_, __, index) => index,
   (_, __, ___, excludedId) => excludedId,
-  ({ Card }, cardId, index, excludedId) => {
+  (_, __, ___, ____, taskListId) => taskListId,
+  ({ Card, TaskList }, cardId, index, excludedId, taskListId) => {
     const cardModel = Card.withId(cardId);
 
     if (!cardModel) {
       return cardModel;
     }
 
-    return nextPosition(cardModel.getOrderedTasksQuerySet().toRefArray(), index, excludedId);
+    // Positions are per task list; without one, the card's first list (where the server puts it)
+    const taskListModel = (taskListId && TaskList.withId(taskListId)) || cardModel.getOrderedTaskListsQuerySet().first();
+    const tasksQuerySet = taskListModel ? taskListModel.getOrderedTasksQuerySet() : cardModel.getOrderedTasksQuerySet();
+
+    return nextPosition(tasksQuerySet.toRefArray(), index, excludedId);
   },
 );
 

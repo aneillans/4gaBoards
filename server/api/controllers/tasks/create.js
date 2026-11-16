@@ -18,6 +18,10 @@ module.exports = {
       regex: /^[0-9]+$/,
       required: true,
     },
+    taskListId: {
+      type: 'string',
+      regex: /^[0-9]+$/,
+    },
     position: {
       type: 'number',
     },
@@ -61,7 +65,11 @@ module.exports = {
       throw Errors.NOT_ENOUGH_RIGHTS;
     }
 
-    const values = _.pick(inputs, ['position', 'name', 'isCompleted', 'dueDate']);
+    const values = _.pick(inputs, ['position', 'name', 'isCompleted', 'dueDate', 'taskListId']);
+
+    if (values.taskListId && !(await TaskList.findOne({ id: values.taskListId, cardId: card.id }))) {
+      throw Errors.NOT_ENOUGH_RIGHTS;
+    }
 
     const task = await sails.helpers.tasks.createOne.with({
       values: {

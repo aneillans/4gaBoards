@@ -45,12 +45,20 @@ module.exports = {
   async fn(inputs) {
     const { values, currentUser, skipMetaUpdate, skipActions } = inputs;
 
+    // Tasks live in a task list; without one they go into the card's first list
+    let taskListId = values.taskListId || (values.taskList && values.taskList.id);
+    if (!taskListId) {
+      ({ id: taskListId } = await sails.helpers.taskLists.getOrCreateDefault.with({ card: values.card, currentUser, request: inputs.request }));
+    }
+    delete values.taskList;
+    values.taskListId = taskListId;
+
     if (_.isUndefined(values.position)) {
-      const [lastTask] = await Task.find({ cardId: values.card.id }).sort('position DESC').limit(1);
+      const [lastTask] = await Task.find({ taskListId }).sort('position DESC').limit(1);
       values.position = (lastTask?.position || 0) + sails.config.custom.positionGap;
     }
 
-    const tasks = await sails.helpers.cards.getTasks(values.card.id);
+    const tasks = await Task.find({ taskListId }).sort('position');
 
     const { position, repositions } = sails.helpers.utils.insertToPositionables(values.position, tasks);
 

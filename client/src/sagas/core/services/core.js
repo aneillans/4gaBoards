@@ -29,6 +29,7 @@ export function* initializeCore() {
     cardMemberships,
     cardLabels,
     tasks,
+    taskLists,
     taskMemberships,
     attachments,
     activities,
@@ -71,6 +72,7 @@ export function* initializeCore() {
       boardTemplates,
     ),
   );
+  yield put(actions.receiveTaskLists(taskLists || []));
 }
 
 export function* changeCoreLanguage(language) {

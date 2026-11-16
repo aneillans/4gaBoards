@@ -87,6 +87,7 @@ module.exports = {
       cardId: cardIds,
     });
     const labels = await sails.helpers.boards.getLabels(inputs.id);
+    const taskLists = await TaskList.find({ cardId: cardIds }).sort('position');
     const tasks = await sails.helpers.cards.getTasks(cardIds);
     const taskIds = sails.helpers.utils.mapRecords(tasks);
     const taskMemberships = await sails.helpers.cards.getTaskMemberships(taskIds);
@@ -125,6 +126,7 @@ module.exports = {
       cardLabels,
       cardSubscriptions,
       labels,
+      taskLists,
       tasks,
       taskMemberships,
       users,

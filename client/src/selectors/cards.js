@@ -80,18 +80,44 @@ export const makeSelectTasksByCardId = () =>
         return cardModel;
       }
 
-      return cardModel
-        .getOrderedTasksQuerySet()
-        .toModelArray()
-        .map((taskModel) => ({
-          ...taskModel.ref,
-          ...getMeta(taskModel),
-          isPersisted: !isLocalId(taskModel.id),
-        }));
+      return cardModel.getOrderedFrontTasksModelArray().map((taskModel) => ({
+        ...taskModel.ref,
+        ...getMeta(taskModel),
+        isPersisted: !isLocalId(taskModel.id),
+      }));
     },
   );
 
 export const selectTasksByCardId = makeSelectTasksByCardId();
+
+// Task lists of the current card, each with its tasks, for the card modal
+export const selectTaskListsForCurrentCard = createSelector(
+  orm,
+  (state) => selectPath(state).cardId,
+  ({ Card }, id) => {
+    const cardModel = id && Card.withId(id);
+
+    if (!cardModel) {
+      return [];
+    }
+
+    return cardModel
+      .getOrderedTaskListsQuerySet()
+      .toModelArray()
+      .map((taskListModel) => ({
+        ...taskListModel.ref,
+        isPersisted: !isLocalId(taskListModel.id),
+        tasks: taskListModel
+          .getOrderedTasksQuerySet()
+          .toModelArray()
+          .map((taskModel) => ({
+            ...taskModel.ref,
+            ...getMeta(taskModel),
+            isPersisted: !isLocalId(taskModel.id),
+          })),
+      }));
+  },
+);
 
 export const makeSelectClosestTaskDueDateByCardId = () =>
   createSelector(
@@ -517,6 +543,7 @@ export default {
   selectUsersForCurrentCard,
   selectLabelsForCurrentCard,
   selectTasksForCurrentCard,
+  selectTaskListsForCurrentCard,
   selectAttachmentsForCurrentCard,
   selectCommentsForCurrentCard,
   selectNotificationIdsForCurrentCard,

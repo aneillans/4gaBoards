@@ -100,6 +100,20 @@ module.exports = {
     const coverAttachment = attachments.find((attachment) => attachment.id === card.coverAttachmentId);
     const coverAttachmentDirname = coverAttachment != null ? coverAttachment.dirname : undefined;
 
+    // Task lists first, so each copied task lands in the copy of its own list
+    const taskLists = await TaskList.find({ cardId: card.id }).sort('position');
+    const newTaskListIdMapping = {};
+    // eslint-disable-next-line no-restricted-syntax
+    for (const taskList of taskLists) {
+      // eslint-disable-next-line no-await-in-loop
+      const newTaskList = await sails.helpers.taskLists.createOne.with({
+        values: { ..._.pick(taskList, ['position', 'name', 'showOnFrontOfCard', 'hideCompletedTasks']), card: copiedCard },
+        currentUser,
+        request: this.req,
+      });
+      newTaskListIdMapping[taskList.id] = newTaskList.id;
+    }
+
     const newTaskIdMapping = {};
     // TODO make duplication faster - see import from boards approach - use createEach directly, to not cause many broadcasts
     await Promise.all(
@@ -107,6 +121,7 @@ module.exports = {
         const newTask = await sails.helpers.tasks.createOne.with({
           values: {
             ..._.omit(task, ['id', 'cardId']), // Omit the id and cardId to ensure a new task is created for the copied card
+            taskListId: newTaskListIdMapping[task.taskListId],
             card: copiedCard,
           },
           currentUser,
@@ -198,6 +213,7 @@ module.exports = {
 
     const createdLabels = await sails.helpers.cards.getCardLabels(card.id);
     const createdMemberships = await sails.helpers.cards.getCardMemberships(card.id);
+    const createdTaskLists = await TaskList.find({ cardId: copiedCard.id });
     const createdTasks = await sails.helpers.cards.getTasks(copiedCard.id);
     const createdTaskIds = sails.helpers.utils.mapRecords(createdTasks);
     const createdTaskMemberships = await sails.helpers.cards.getTaskMemberships(createdTaskIds);
@@ -214,6 +230,7 @@ module.exports = {
       included: {
         cardLabels: createdLabels,
         cardMemberships: createdMemberships,
+        taskLists: createdTaskLists,
         tasks: createdTasks,
         taskMemberships: createdTaskMemberships,
         attachments: createdAttachments,
