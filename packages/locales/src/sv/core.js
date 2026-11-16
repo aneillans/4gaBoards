@@ -308,6 +308,7 @@ export default {
       enterGithubRepository: 'GitHub-repo… <Ägare/Repo>',
       enterLabelName: 'Namnge etikett…',
       enterListName: 'Namnge lista…',
+      enterProjectDescription: 'Ange projektbeskrivning...',
       enterProjectName: 'Namnge projekt…',
       enterSystemNotificationTags: 'Ange taggar separerade med kommatecken...',
       enterTaskDescription: 'Beskriv uppgift…',

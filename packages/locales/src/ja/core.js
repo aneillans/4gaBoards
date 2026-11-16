@@ -301,6 +301,7 @@ export default {
       enterGithubRepository: 'GitHub リポジトリを入力... <Owner/Repo>',
       enterLabelName: 'ラベル名を入力...',
       enterListName: 'リスト名を入力...',
+      enterProjectDescription: 'プロジェクトの説明を入力...',
       enterProjectName: 'プロジェクト名を入力...',
       enterSystemNotificationTags: 'タグをカンマ区切りで入力...',
       enterTaskDescription: 'タスク説明を入力...',

@@ -301,6 +301,7 @@ export default {
       enterGithubRepository: 'GitHub 저장소... <Owner/Repo>',
       enterLabelName: '라벨 이름...',
       enterListName: '리스트 이름...',
+      enterProjectDescription: '프로젝트 설명 입력...',
       enterProjectName: '프로젝트 이름...',
       enterSystemNotificationTags: '쉼표로 구분된 태그 입력...',
       enterTaskDescription: '작업 설명...',

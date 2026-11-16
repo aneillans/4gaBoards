@@ -322,6 +322,7 @@ export default {
       enterGithubRepository: 'Репозиторий GitHub... <Owner/Repo>',
       enterLabelName: 'Название метки...',
       enterListName: 'Название списка...',
+      enterProjectDescription: 'Введите описание проекта...',
       enterProjectName: 'Название проекта...',
       enterSystemNotificationTags: 'Введите теги через запятую...',
       enterTaskDescription: 'Описание задачи...',

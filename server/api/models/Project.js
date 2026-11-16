@@ -51,6 +51,10 @@ module.exports = {
       type: 'string',
       required: true,
     },
+    description: {
+      type: 'string',
+      allowNull: true,
+    },
     background: {
       type: 'json',
     },

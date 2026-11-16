@@ -1286,6 +1286,16 @@ export const activityRenderSpec = {
         };
       }
 
+      if (ctx.activity.data.projectDescriptionUpdated) {
+        return {
+          key: ctx.hideProjectDetails ? 'activity.projectUpdateDescriptionShort' : 'activity.projectUpdateDescription',
+          values: {
+            project: ctx.projectNameTruncated,
+          },
+          components: [{ slot: 'project', title: ctx.projectName }],
+        };
+      }
+
       return null;
     },
 

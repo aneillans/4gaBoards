@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: 'プロジェクト <project>{{project}}</project> から <user>{{user}}</user> をマネージャーから削除',
       projectManagerRemoveShort: 'このプロジェクトから <user>{{user}}</user> をマネージャーから削除',
       projectShort: 'プロジェクト',
+      projectUpdateDescription: 'プロジェクト <project>{{project}}</project> の説明を更新',
+      projectUpdateDescriptionShort: 'このプロジェクトの説明を更新',
       projectUpdateName: 'プロジェクト <prevProject>{{prevProject}}</prevProject> を <project>{{project}}</project> に更新',
       projectUpdateNameShort: 'プロジェクト <prevProject>{{prevProject}}</prevProject> を <project>{{project}}</project> に更新',
       task: 'タスク',

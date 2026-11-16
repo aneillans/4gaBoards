@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: "<user>{{user}}</user> foydalanuvchisi <project>{{project}}</project> loyihasining menejerlari orasidan o'chirildi",
       projectManagerRemoveShort: "<user>{{user}}</user> foydalanuvchisi ushbu loyiha menejerlari orasidan o'chirildi",
       projectShort: 'Loyiha',
+      projectUpdateDescription: '<project>{{project}}</project> loyihasi tavsifi yangilandi',
+      projectUpdateDescriptionShort: 'Ushbu loyiha tavsifi yangilandi',
       projectUpdateName: '<prevProject>{{prevProject}}</prevProject> loyihasi <project>{{project}}</project> ga yangilandi',
       projectUpdateNameShort: '<prevProject>{{prevProject}}</prevProject> loyihasi <project>{{project}}</project> ga yangilandi',
       task: 'Vazifa',

@@ -308,6 +308,7 @@ export default {
       enterGithubRepository: 'GitHub repozitoriyini kiriting... <Owner/Repo>',
       enterLabelName: 'Yorliq nomini kiriting...',
       enterListName: "Ro'yxat nomini kiriting...",
+      enterProjectDescription: 'Loyiha tavsifini kiriting...',
       enterProjectName: 'Loyiha nomini kiriting...',
       enterSystemNotificationTags: 'Teglarni vergul bilan ajratib kiriting...',
       enterTaskDescription: 'Vazifa tavsifini kiriting...',

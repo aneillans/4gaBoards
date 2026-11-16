@@ -315,6 +315,7 @@ export default {
       enterGithubRepository: 'Zadajte GitHub repozitár... <Owner/Repo>',
       enterLabelName: 'Zadajte názov štítku...',
       enterListName: 'Zadajte názov zoznamu...',
+      enterProjectDescription: 'Zadajte popis projektu...',
       enterProjectName: 'Zadajte názov projektu...',
       enterSystemNotificationTags: 'Zadajte tagy oddelené čiarkami...',
       enterTaskDescription: 'Zadajte popis úlohy...',

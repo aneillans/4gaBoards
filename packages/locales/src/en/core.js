@@ -308,6 +308,7 @@ export default {
       enterGithubRepository: 'Enter GitHub repository... <Owner/Repo>',
       enterLabelName: 'Enter label name...',
       enterListName: 'Enter list name...',
+      enterProjectDescription: 'Enter project description...',
       enterProjectName: 'Enter project name...',
       enterSystemNotificationTags: 'Enter tags separated by commas...',
       enterTaskDescription: 'Enter task description...',

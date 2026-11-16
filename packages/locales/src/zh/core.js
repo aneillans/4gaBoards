@@ -301,6 +301,7 @@ export default {
       enterGithubRepository: '输入 GitHub 仓库... <Owner/Repo>',
       enterLabelName: '输入标签名称...',
       enterListName: '输入列表名称...',
+      enterProjectDescription: '输入项目描述...',
       enterProjectName: '输入项目名称...',
       enterSystemNotificationTags: '输入用逗号分隔的标签...',
       enterTaskDescription: '输入任务描述...',
