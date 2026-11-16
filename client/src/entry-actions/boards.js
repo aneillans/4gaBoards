@@ -83,8 +83,17 @@ const updateBoardSearchParams = (id, searchParams) => ({
   },
 });
 
+const updateBoardContext = (id, context) => ({
+  type: EntryActionTypes.BOARD_CONTEXT_UPDATE,
+  payload: {
+    id,
+    context,
+  },
+});
+
 export default {
   createBoard,
+  updateBoardContext,
   createBoardInCurrentProject,
   handleBoardCreate,
   fetchBoard,

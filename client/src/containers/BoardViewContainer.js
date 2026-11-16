@@ -2,19 +2,21 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import BoardView from '../components/Board/BoardView';
-import { BoardMembershipRoles } from '../constants/Enums';
+import { BoardContexts, BoardMembershipRoles } from '../constants/Enums';
 import entryActions from '../entry-actions';
 import selectors from '../selectors';
 
 const mapStateToProps = (state) => {
   const currentUserMembership = selectors.selectCurrentUserMembershipForCurrentBoard(state);
   const listIds = selectors.selectListIdsForCurrentBoard(state);
+  const { context } = selectors.selectCurrentBoard(state);
 
   const isCurrentUserEditor = !!currentUserMembership && currentUserMembership.role === BoardMembershipRoles.EDITOR;
 
   return {
     listIds,
-    canEdit: isCurrentUserEditor,
+    // Archive and trash are a single fixed list: no adding or reordering lists
+    canEdit: isCurrentUserEditor && context === BoardContexts.BOARD,
   };
 };
 

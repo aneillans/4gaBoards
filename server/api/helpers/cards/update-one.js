@@ -101,10 +101,30 @@ module.exports = {
       }
     }
 
+    let isSpecialListChange = false;
     if (values.list) {
-      values.isCompleted = values.list.isCompleted;
-      values.completedAt = values.isCompleted ? new Date().toUTCString() : null;
-      values.completedById = values.isCompleted ? currentUser.id : null;
+      const isToSpecial = sails.helpers.lists.isSpecial(values.list);
+      const isFromSpecial = !!inputs.list && sails.helpers.lists.isSpecial(inputs.list);
+      isSpecialListChange = isToSpecial || isFromSpecial;
+
+      // Same rules as Planka: remember where a card came from when it is archived or trashed, so it
+      // can be restored there; forget it once the card leaves the trash, the archive or the board
+      if (values.board || (inputs.list && inputs.list.type === List.Types.TRASH)) {
+        values.prevListId = null;
+      } else if (isToSpecial) {
+        values.prevListId = inputs.list.id;
+      } else if (inputs.list && inputs.list.type === List.Types.ARCHIVE) {
+        values.prevListId = null;
+      }
+
+      values.listChangedAt = new Date().toISOString();
+
+      // Archive and trash keep a card's done state; normal lists still decide it
+      if (!isToSpecial) {
+        values.isCompleted = values.list.isCompleted;
+        values.completedAt = values.isCompleted ? new Date().toUTCString() : null;
+        values.completedById = values.isCompleted ? currentUser.id : null;
+      }
     }
 
     if (!_.isUndefined(values.position)) {
@@ -304,7 +324,7 @@ module.exports = {
           request: inputs.request,
         });
         await sails.helpers.lists.updateMeta.with({ id: inputs.list.id, currentUser, skipMetaUpdate });
-        if (isCompletionChange) {
+        if (isCompletionChange || isSpecialListChange) {
           await sails.helpers.boards.updateStats.with({ boardId: card.boardId });
         }
       } else {

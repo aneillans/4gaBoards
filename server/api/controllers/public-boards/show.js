@@ -29,10 +29,13 @@ module.exports = {
     const { board, project } = await sails.helpers.boards.getPublicPath(inputs.publicId).intercept('pathNotFound', () => Errors.BOARD_NOT_FOUND);
 
     const labels = await sails.helpers.boards.getLabels(board.id);
-    const lists = await sails.helpers.boards.getLists(board.id);
-    const cards = await sails.helpers.boards.getCards(board.id);
+    // Archive and trash stay private: neither those lists nor their cards are shown publicly
+    const lists = await sails.helpers.boards.getLists.with({ idOrIds: board.id, onlyActive: true });
+    const activeListIds = new Set(sails.helpers.utils.mapRecords(lists));
+    const cards = (await sails.helpers.boards.getCards(board.id)).filter((card) => activeListIds.has(card.listId));
     const cardIds = sails.helpers.utils.mapRecords(cards);
     const cardLabels = await sails.helpers.cards.getCardLabels(cardIds);
+    const taskLists = await TaskList.find({ cardId: cardIds }).sort('position');
     const tasks = await sails.helpers.cards.getTasks(cardIds);
 
     let users = [];
@@ -85,6 +88,7 @@ module.exports = {
         cards: publicCards,
         cardMemberships,
         cardLabels,
+        taskLists,
         tasks,
         taskMemberships,
         attachments,

@@ -14,6 +14,7 @@ const ActionsCell = React.memo(
     isCompleted,
     projectId,
     allProjectsToLists,
+    listContext,
     allBoardMemberships,
     boardMemberships,
     boardLabels,
@@ -87,6 +88,7 @@ const ActionsCell = React.memo(
             lastActivityId,
           }}
           projectsToLists={allProjectsToLists}
+          listContext={listContext}
           allBoardMemberships={allBoardMemberships}
           boardMemberships={boardMemberships}
           currentUserIds={users.map((user) => user.id)}
@@ -140,6 +142,7 @@ ActionsCell.propTypes = {
   isCompleted: PropTypes.bool.isRequired,
   projectId: PropTypes.string.isRequired,
   allProjectsToLists: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  listContext: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   allBoardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardLabels: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -180,6 +183,7 @@ ActionsCell.propTypes = {
 };
 
 ActionsCell.defaultProps = {
+  listContext: null,
   dueDate: undefined,
   timer: undefined,
   lastActivityId: undefined,

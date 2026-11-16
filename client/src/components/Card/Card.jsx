@@ -56,6 +56,7 @@ const Card = React.memo(
     attachmentsCount,
     commentCount,
     allProjectsToLists,
+    listContext,
     boardMemberships,
     boardAndCardMemberships,
     boardAndTaskMemberships,
@@ -476,6 +477,7 @@ const Card = React.memo(
                       lastActivityId,
                     }}
                     projectsToLists={allProjectsToLists}
+                    listContext={listContext}
                     allBoardMemberships={boardAndCardMemberships}
                     boardMemberships={boardMemberships}
                     currentUserIds={users.map((user) => user.id)}
@@ -549,6 +551,7 @@ Card.propTypes = {
   attachmentsCount: PropTypes.number.isRequired,
   commentCount: PropTypes.number.isRequired,
   allProjectsToLists: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  listContext: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   boardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardAndCardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardAndTaskMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -597,6 +600,7 @@ Card.propTypes = {
 };
 
 Card.defaultProps = {
+  listContext: null,
   dueDate: undefined,
   completedAt: undefined,
   timer: undefined,

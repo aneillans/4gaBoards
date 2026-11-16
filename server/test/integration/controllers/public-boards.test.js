@@ -152,6 +152,31 @@ describe('public-boards (controller)', () => {
       expect(body.included.attachments[0].url).to.contain(`/public-boards/${board.publicId}/attachments/`);
       expect(body.included.attachments[0]).to.not.have.property('dirname');
     });
+
+    it('leaves the archive and trash, and their cards, out of the public board', async () => {
+      const archive = await List.create({ id: '9403', type: 'archive', position: 0, name: 'common.archive', isCollapsed: false, boardId: board.id, createdById: user.id }).fetch();
+      const archived = await Card.create({ id: '9503', position: 1, name: 'Archived', commentCount: 0, isCreatedViaApi: false, boardId: board.id, listId: archive.id, createdById: user.id }).fetch();
+
+      const { body } = await request(`/api/public-boards/${board.publicId}`);
+      const comments = await request(`/api/public-boards/${board.publicId}/cards/${archived.id}/comments`);
+
+      expect(body.included.lists.map((list) => list.id)).to.not.include(archive.id);
+      expect(body.included.cards.map((item) => item.id)).to.not.include(archived.id);
+      expect(comments.status).to.equal(404);
+
+      await Card.destroy({ id: archived.id });
+      await List.destroy({ id: archive.id });
+    });
+
+    it('includes the task lists of public cards', async () => {
+      const taskList = await TaskList.create({ id: '9904', cardId: card.id, position: 1, name: 'Checklist', createdById: user.id }).fetch();
+
+      const { body } = await request(`/api/public-boards/${board.publicId}`);
+
+      expect(body.included.taskLists.map((item) => item.id)).to.include(taskList.id);
+
+      await TaskList.destroy({ id: taskList.id });
+    });
   });
 
   describe('GET /api/public-boards/:publicId/cards/:cardId/comments', () => {

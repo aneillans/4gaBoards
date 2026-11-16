@@ -38,7 +38,7 @@ module.exports = {
     const { values, currentUser, skipMetaUpdate } = inputs;
 
     if (!_.isUndefined(values.position)) {
-      const lists = await sails.helpers.boards.getLists(inputs.record.boardId, inputs.record.id);
+      const lists = await sails.helpers.boards.getLists.with({ idOrIds: inputs.record.boardId, exceptListIdOrIds: inputs.record.id, onlyActive: true });
 
       const { position, repositions } = sails.helpers.utils.insertToPositionables(values.position, lists);
 

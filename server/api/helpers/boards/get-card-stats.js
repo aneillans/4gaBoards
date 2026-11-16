@@ -17,7 +17,8 @@ module.exports = {
       stats[id] = { total: 0, completed: 0 };
     });
 
-    const cards = await sails.helpers.boards.getCards(inputs.idOrIds);
+    const specialListIds = await sails.helpers.boards.getSpecialListIds(inputs.idOrIds);
+    const cards = (await sails.helpers.boards.getCards(inputs.idOrIds)).filter((card) => !specialListIds.has(card.listId));
     cards.forEach((card) => {
       const { boardId } = card;
       if (!stats[boardId]) {

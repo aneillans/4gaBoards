@@ -1,4 +1,23 @@
 :global(#app) {
+  .emptyTrashButton {
+    font-size: 12px;
+    padding: 0 6px;
+    white-space: nowrap;
+    width: auto;
+  }
+
+  .trashAutoEmptyButton {
+    align-items: center;
+    display: flex;
+    width: auto;
+  }
+
+  .trashAutoEmptyDays {
+    font-size: 12px;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+
   .title {
     overflow: hidden;
     text-overflow: ellipsis;

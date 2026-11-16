@@ -99,6 +99,9 @@ module.exports = {
       throw 'boardCreateFailed';
     }
 
+    // Before any import, so imported archive and trash cards land in these lists
+    await sails.helpers.lists.createSpecial.with({ board, currentUser });
+
     if (inputs.import && inputs.import.type === Board.ImportTypes.BOARDS) {
       await sails.helpers.boards.importFromBoards
         .with({

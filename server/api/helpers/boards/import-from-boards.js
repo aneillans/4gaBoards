@@ -577,7 +577,10 @@ module.exports = {
           dueDate: parseJSON(card.dueDate),
           commentCount: card.commentCount,
           timer: parseJSON(card.timer),
-          isCompleted: newList.isCompleted,
+          // Archive and trash keep a card's own done state; normal lists decide it
+          isCompleted: sails.helpers.lists.isSpecial(newList) ? card.isCompleted === true || card.isCompleted === 'true' : newList.isCompleted,
+          prevListId: importedLists[card.prevListId]?.id ?? null,
+          listChangedAt: parseJSON(card.listChangedAt),
           isCreatedViaApi: !!(inputs.request && inputs.request.apiClient),
           createdAt: parseJSON(card.createdAt),
           createdById: allUsers[card.createdById]?.id ?? currentUser.id,
@@ -612,8 +615,13 @@ module.exports = {
     };
 
     const importLists = async () => {
+      // The board already has its own archive and trash lists; exported ones map onto those
+      const isSpecialExportedList = (list) => List.SPECIAL_TYPES.includes(list.type);
+      const specialLists = _.keyBy(await List.find({ boardId: inputs.board.id, type: List.SPECIAL_TYPES }), 'type');
+      const normalLists = lists.filter((list) => !isSpecialExportedList(list));
+
       const listRecords = await Promise.all(
-        lists.map(async (list) => {
+        normalLists.map(async (list) => {
           const updatedAt = parseJSON(list.updatedAt);
           const isKeywordCompleted = await sails.helpers.utils.isCompletedListName(list.name);
 
@@ -650,12 +658,18 @@ module.exports = {
         insertedLists.push(completedList);
       }
 
+      const listPairs = [...normalLists.map((list, i) => [list, insertedLists[i]]), ...lists.filter(isSpecialExportedList).flatMap((list) => (specialLists[list.type] ? [[list, specialLists[list.type]]] : []))];
+
+      // Every list id must be mapped before any card is imported, for cards' prevListId
+      listPairs.forEach(([list, newList]) => {
+        importedLists[list.id] = newList;
+      });
+
       await Promise.all(
-        lists.map(async (list, i) => {
-          importedLists[list.id] = insertedLists[i];
+        listPairs.map(async ([list, newList]) => {
           const actionsToImport = getActionsOfList(list.id);
-          await importActions(actionsToImport, { boardId: inputs.board.id, projectId: inputs.board.projectId, listId: insertedLists[i].id });
-          return importCards(insertedLists[i], list);
+          await importActions(actionsToImport, { boardId: inputs.board.id, projectId: inputs.board.projectId, listId: newList.id });
+          return importCards(newList, list);
         }),
       );
     };

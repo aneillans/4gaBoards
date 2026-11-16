@@ -94,6 +94,11 @@ module.exports = {
       throw Errors.NOT_ENOUGH_RIGHTS;
     }
 
+    // Cards reach the archive or trash by moving there, never by being created there
+    if (sails.helpers.lists.isSpecial(list)) {
+      throw Errors.NOT_ENOUGH_RIGHTS;
+    }
+
     const values = _.pick(inputs, ['position', 'name', 'description', 'dueDate', 'timer', 'mailCreatorAddress']);
 
     const card = await sails.helpers.cards.createOne

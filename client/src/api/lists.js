@@ -21,6 +21,8 @@ const deleteList = (id, headers) =>
     item: transformList(body.item),
   }));
 
+const clearList = (id, headers) => socket.post(`/lists/${id}/clear`, undefined, headers);
+
 /* Event handlers */
 
 const makeHandleListCreate = (next) => (body) => {
@@ -38,6 +40,7 @@ export default {
   createList,
   updateList,
   deleteList,
+  clearList,
   makeHandleListCreate,
   makeHandleListUpdate,
   makeHandleListDelete,

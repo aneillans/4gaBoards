@@ -2,6 +2,7 @@ import { attr, fk } from 'redux-orm';
 
 import ActionTypes from '../constants/ActionTypes';
 import Config from '../constants/Config';
+import { ListTypes } from '../constants/Enums';
 import BaseModel from './BaseModel';
 
 export default class extends BaseModel {
@@ -13,6 +14,9 @@ export default class extends BaseModel {
     name: attr(),
     isCollapsed: attr(),
     isCompleted: attr(),
+    type: attr({
+      getDefault: () => ListTypes.ACTIVE,
+    }),
     boardId: fk({
       to: 'Board',
       as: 'board',
@@ -88,6 +92,15 @@ export default class extends BaseModel {
         List.withId(payload.id).deleteWithRelated();
 
         break;
+      case ActionTypes.LIST_CLEAR__SUCCESS: {
+        const listModel = List.withId(payload.id);
+
+        if (listModel) {
+          listModel.cards.toModelArray().forEach((cardModel) => cardModel.deleteWithRelated());
+        }
+
+        break;
+      }
       case ActionTypes.LIST_DELETE__SUCCESS:
       case ActionTypes.LIST_DELETE_HANDLE: {
         const listModel = List.withId(payload.list.id);
@@ -117,7 +130,16 @@ export default class extends BaseModel {
   }
 
   getOrderedCardsQuerySet() {
+    // Archive and trash show the most recently moved cards first
+    if (this.isSpecial()) {
+      return this.cards.orderBy(['listChangedAt', 'id'], [false, false]);
+    }
+
     return this.cards.orderBy('position');
+  }
+
+  isSpecial() {
+    return this.type === ListTypes.ARCHIVE || this.type === ListTypes.TRASH;
   }
 
   getOrderedCardsModelArray() {

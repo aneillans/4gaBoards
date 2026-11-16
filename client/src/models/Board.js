@@ -2,6 +2,7 @@ import { attr, fk, many } from 'redux-orm';
 
 import ActionTypes from '../constants/ActionTypes';
 import Config from '../constants/Config';
+import { BoardContexts, ListTypes } from '../constants/Enums';
 import BaseModel from './BaseModel';
 
 export default class extends BaseModel {
@@ -13,6 +14,7 @@ export default class extends BaseModel {
     name: attr(),
     isGithubConnected: attr(),
     githubRepo: attr(),
+    trashAutoEmptyDays: attr(),
     isPublic: attr({
       getDefault: () => false,
     }),
@@ -58,6 +60,10 @@ export default class extends BaseModel {
     }),
     filterUsers: many('User', 'filterBoards'),
     filterLabels: many('Label', 'filterBoards'),
+    // Which part of the board is shown: the normal lists, the archive or the trash. Client-only.
+    context: attr({
+      getDefault: () => BoardContexts.BOARD,
+    }),
     searchParams: attr({
       getDefault: () => ({
         query: '',
@@ -147,6 +153,12 @@ export default class extends BaseModel {
 
         payload.boards.forEach((board) => {
           Board.upsert(board);
+        });
+
+        break;
+      case ActionTypes.BOARD_CONTEXT_UPDATE:
+        Board.withId(payload.id).update({
+          context: payload.context,
         });
 
         break;
@@ -289,6 +301,25 @@ export default class extends BaseModel {
 
   getOrderedListsQuerySet() {
     return this.lists.orderBy('position');
+  }
+
+  // Lists for the current context: the normal lists, or only the archive or trash list
+  getOrderedContextListsModelArray() {
+    const listModels = this.getOrderedListsQuerySet().toModelArray();
+
+    if (this.context === BoardContexts.ARCHIVE) {
+      return listModels.filter((listModel) => listModel.type === ListTypes.ARCHIVE);
+    }
+
+    if (this.context === BoardContexts.TRASH) {
+      return listModels.filter((listModel) => listModel.type === ListTypes.TRASH);
+    }
+
+    return listModels.filter((listModel) => !listModel.isSpecial());
+  }
+
+  getSpecialListModel(type) {
+    return this.lists.filter({ type }).first();
   }
 
   getOrderedActivitiesQuerySet() {

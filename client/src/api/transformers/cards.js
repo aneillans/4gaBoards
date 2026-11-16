@@ -20,6 +20,9 @@ export const transformCard = (card) => ({
   ...(card.completedAt && {
     completedAt: new Date(card.completedAt),
   }),
+  ...(card.listChangedAt && {
+    listChangedAt: new Date(card.listChangedAt),
+  }),
 });
 
 export const transformCardData = (data) => ({

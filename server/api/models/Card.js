@@ -75,6 +75,15 @@ module.exports = {
       required: true,
       columnName: 'list_id',
     },
+    prevListId: {
+      type: 'string',
+      allowNull: true,
+      columnName: 'prev_list_id',
+    },
+    listChangedAt: {
+      type: 'ref',
+      columnName: 'list_changed_at',
+    },
     createdById: {
       model: 'User',
       required: true,

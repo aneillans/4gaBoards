@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import DroppableTypes from '../../constants/DroppableTypes';
+import { ListTypes } from '../../constants/Enums';
 import { useLocalStorage } from '../../hooks';
 import { useToggle } from '../../lib/hooks';
 import { dragKey, hideIfPending } from '../../lib/hooks/use-drop-animation';
@@ -73,6 +74,7 @@ const CardModal = React.memo(
     isGithubConnected,
     githubRepo,
     allProjectsToLists,
+    listContext,
     boardMemberships,
     boardAndCardMemberships,
     boardAndTaskMemberships,
@@ -160,6 +162,11 @@ const CardModal = React.memo(
     const selectedBoard = useMemo(() => (selectedProject && selectedProject.boards.find((board) => board.id === boardId)) || null, [selectedProject, boardId]);
     const selectedList = useMemo(() => (selectedBoard && selectedBoard.lists.find((list) => list.id === listId)) || null, [selectedBoard, listId]);
     const selectedListName = useMemo(() => (selectedList?.name?.startsWith('common.') ? t(selectedList.name) : selectedList?.name), [selectedList, t]);
+    const listType = listContext ? listContext.listType : ListTypes.ACTIVE;
+    const isInSpecialList = listType === ListTypes.ARCHIVE || listType === ListTypes.TRASH;
+    // Archive and trash are not move targets, so name them directly
+    const displayedListName = isInSpecialList ? t(listType === ListTypes.ARCHIVE ? 'common.archive' : 'common.trash') : selectedListName;
+    const restoreListName = listContext && listContext.restoreListName && (listContext.restoreListName.startsWith('common.') ? t(listContext.restoreListName) : listContext.restoreListName);
     const userDropPlaceholder = useUserDropSlot((slot) => (slot && slot.cardId === id && !slot.taskId && slot.target === DroppableTypes.CARDMODAL ? slot.user : null));
     const droppedUserId = useUserDropped((slot) => (slot && slot.cardId === id && !slot.taskId && slot.target === DroppableTypes.CARDMODAL ? slot.userId : null));
 
@@ -403,12 +410,17 @@ const CardModal = React.memo(
               </div>
             </NameField>
           </div>
-          {canEdit && (
+          {canEdit && !isInSpecialList && (
             <Button variant={ButtonVariant.Icon} title={isCompleted ? t('common.markAsNotDone') : t('common.markAsDone')} onClick={handleToggleMarkAsCompleted}>
               <Icon type={isCompleted ? IconType.Reset : IconType.Check} size={IconSize.Size14} />
             </Button>
           )}
-          {canEdit && isCompleted && (
+          {canEdit && isCompleted && !isInSpecialList && listContext && listContext.trashListId && (
+            <Button variant={ButtonVariant.Icon} title={t('common.moveCardToTrash')} onClick={() => onMove(listContext.trashListId)}>
+              <Icon type={IconType.Trash} size={IconSize.Size14} />
+            </Button>
+          )}
+          {canEdit && (listType === ListTypes.TRASH || (isCompleted && !(listContext && listContext.trashListId))) && (
             <DeletePopup
               title={t('common.deleteCard', { context: 'title' })}
               content={t('common.areYouSureYouWantToDeleteThisCard')}
@@ -435,6 +447,7 @@ const CardModal = React.memo(
               lastActivityId,
             }}
             projectsToLists={allProjectsToLists}
+            listContext={listContext}
             allBoardMemberships={boardAndCardMemberships}
             boardMemberships={boardMemberships}
             currentUserIds={users.map((user) => user.id)}
@@ -478,6 +491,15 @@ const CardModal = React.memo(
             <Icon type={IconType.Close} size={IconSize.Size14} />
           </Button>
         </div>
+        {isInSpecialList && (
+          <div className={s.specialListBanner}>
+            <Icon type={listType === ListTypes.ARCHIVE ? IconType.Archive : IconType.Trash} size={IconSize.Size14} />
+            <span className={s.specialListBannerText}>{listType === ListTypes.ARCHIVE ? t('common.cardIsArchived') : t('common.cardIsInTrash')}</span>
+            {canEdit && listContext.restoreListId && (
+              <Button variant={ButtonVariant.Submit} content={t('common.restoreCardToList', { list: restoreListName })} className={s.specialListBannerButton} onClick={() => onMove(listContext.restoreListId)} />
+            )}
+          </div>
+        )}
         <div className={s.headerListFieldWrapper}>
           <Dropdown
             ref={dropdown}
@@ -496,8 +518,8 @@ const CardModal = React.memo(
           >
             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div className={clsx(canEdit && gs.cursorPointer)} onClick={handleDropdownClick}>
-              <div className={clsx(s.headerListField)} title={selectedListName}>
-                {selectedListName}
+              <div className={clsx(s.headerListField)} title={displayedListName}>
+                {displayedListName}
               </div>
               <Icon type={IconType.TriangleDown} title={t('common.moveCardToList')} size={IconSize.Size10} className={s.headerListFieldIcon} />
             </div>
@@ -985,6 +1007,7 @@ CardModal.propTypes = {
   isGithubConnected: PropTypes.bool.isRequired,
   githubRepo: PropTypes.string.isRequired,
   allProjectsToLists: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
+  listContext: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   boardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardAndCardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardAndTaskMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -1047,6 +1070,7 @@ CardModal.propTypes = {
 };
 
 CardModal.defaultProps = {
+  listContext: null,
   description: undefined,
   dueDate: undefined,
   completedAt: undefined,

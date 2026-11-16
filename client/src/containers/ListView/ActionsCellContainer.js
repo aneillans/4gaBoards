@@ -8,12 +8,14 @@ import selectors from '../../selectors';
 
 const makeMapStateToProps = () => {
   const selectCardById = selectors.makeSelectCardById();
+  const selectListContextByCardId = selectors.makeSelectListContextByCardId();
   const selectUsersByCardId = selectors.makeSelectUsersByCardId();
   const selectLabelsByCardId = selectors.makeSelectLabelsByCardId();
 
   return (state, { id }) => {
     const { projectId } = selectors.selectPath(state);
     const allProjectsToLists = selectors.selectProjectsToListsForCurrentUser(state);
+    const listContext = selectListContextByCardId(state, id);
     const allBoardMemberships = selectors.selectBoardAndCardMembershipsByCardId(state, id);
     const boardMemberships = selectors.selectMembershipsForCurrentBoard(state);
     const boardLabels = selectors.selectLabelsForCurrentBoard(state);
@@ -34,6 +36,7 @@ const makeMapStateToProps = () => {
       isCompleted,
       projectId,
       allProjectsToLists,
+      listContext,
       allBoardMemberships,
       boardMemberships,
       boardLabels,

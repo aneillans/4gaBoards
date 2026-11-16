@@ -15,6 +15,8 @@ export default class extends BaseModel {
     completedAt: attr(),
     description: attr(),
     dueDate: attr(),
+    prevListId: attr(),
+    listChangedAt: attr(),
     timer: attr(),
     commentCount: attr({
       getDefault: () => 0,

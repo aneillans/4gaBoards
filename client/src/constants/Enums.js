@@ -47,3 +47,17 @@ export const NotificationsDeliveryModes = {
   BATCHED: 'batched',
   INSTANT_THEN_BATCHED: 'instant_then_batched',
 };
+
+// Mirrors List.Types on the server. Every board has exactly one archive and one trash list, which the
+// normal board views leave out.
+export const ListTypes = {
+  ACTIVE: 'active',
+  ARCHIVE: 'archive',
+  TRASH: 'trash',
+};
+
+export const BoardContexts = {
+  BOARD: 'board',
+  ARCHIVE: 'archive',
+  TRASH: 'trash',
+};

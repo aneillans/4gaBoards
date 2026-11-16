@@ -20,6 +20,7 @@ const makeMapStateToProps = () => {
     const { projectId } = selectors.selectPath(state);
     const pathView = selectors.selectPathView(state);
     const allProjectsToLists = selectors.selectProjectsToListsForCurrentUser(state);
+    const listContext = selectors.selectListContextByCardId(state, selectors.selectPath(state).cardId);
     const isCurrentUserManager = selectors.selectIsCurrentUserManagerForCurrentProject(state);
     const boardMemberships = selectors.selectMembershipsForCurrentBoard(state);
     const boardAndCardMemberships = selectors.selectBoardAndCardMembershipsForCurrentCard(state);
@@ -145,6 +146,7 @@ const makeMapStateToProps = () => {
       isGithubConnected,
       githubRepo,
       allProjectsToLists,
+      listContext,
       boardMemberships,
       boardAndCardMemberships,
       boardAndTaskMemberships,

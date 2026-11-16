@@ -47,6 +47,11 @@ module.exports = {
       throw Errors.NOT_ENOUGH_RIGHTS;
     }
 
+    // A card in the archive or trash has to be restored before it can be marked done or not done
+    if (sails.helpers.lists.isSpecial(list)) {
+      throw Errors.NOT_ENOUGH_RIGHTS;
+    }
+
     const updatedCard = await sails.helpers.cards.setCompleted.with({
       record: card,
       isCompleted: inputs.isCompleted,

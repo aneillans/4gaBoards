@@ -1164,6 +1164,20 @@ export const activityRenderSpec = {
         };
       }
 
+      if (ctx.activity.data.trashAutoEmptyDays !== undefined) {
+        const { trashAutoEmptyDays } = ctx.activity.data;
+        const key = trashAutoEmptyDays === null ? 'activity.boardTrashAutoEmptyOff' : 'activity.boardTrashAutoEmptyOn';
+
+        return {
+          key: ctx.hideBoardDetails ? `${key}Short` : key,
+          values: {
+            board: ctx.boardNameTruncated,
+            days: trashAutoEmptyDays,
+          },
+          components: [{ slot: 'board', title: ctx.boardName }],
+        };
+      }
+
       if (ctx.activity.data.prevPosition !== undefined) {
         return {
           key: ctx.hideBoardDetails ? 'activity.boardUpdatePositionShort' : 'activity.boardUpdatePosition',

@@ -26,6 +26,13 @@ module.exports = {
     githubRepo: {
       type: 'string',
     },
+    trashAutoEmptyDays: {
+      type: 'number',
+      allowNull: true,
+      isInteger: true,
+      min: 1,
+      max: 3650,
+    },
     isPublic: {
       type: 'boolean',
     },
@@ -64,7 +71,18 @@ module.exports = {
       throw Errors.BOARD_NOT_FOUND; // Forbidden
     }
 
-    const values = _.pick(inputs, ['position', 'name', 'isGithubConnected', 'githubRepo', 'isPublic', 'publicShowMembers', 'publicShowComments', 'publicShowActivity', 'publicShowAttachments']);
+    const values = _.pick(inputs, [
+      'position',
+      'name',
+      'isGithubConnected',
+      'githubRepo',
+      'trashAutoEmptyDays',
+      'isPublic',
+      'publicShowMembers',
+      'publicShowComments',
+      'publicShowActivity',
+      'publicShowAttachments',
+    ]);
 
     // A fresh public id on every publish, so a link revoked by going private never works again
     if (values.isPublic === true && !board.isPublic) {

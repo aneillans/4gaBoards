@@ -20,8 +20,10 @@ module.exports = {
   async fn(inputs) {
     const { board } = await sails.helpers.boards.getPublicPath(inputs.publicId);
     const card = await Card.findOne({ id: inputs.cardId, boardId: board.id });
+    const list = card && (await List.findOne(card.listId));
 
-    if (!card) {
+    // Archived and trashed cards are not public
+    if (!card || !list || sails.helpers.lists.isSpecial(list)) {
       throw 'pathNotFound';
     }
 

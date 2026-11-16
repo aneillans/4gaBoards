@@ -11,6 +11,10 @@ module.exports = {
       type: 'json',
       custom: idOrIdsValidator,
     },
+    onlyActive: {
+      type: 'boolean',
+      defaultsTo: false,
+    },
   },
 
   async fn(inputs) {
@@ -22,6 +26,10 @@ module.exports = {
       criteria.id = {
         '!=': inputs.exceptListIdOrIds,
       };
+    }
+
+    if (inputs.onlyActive) {
+      criteria.type = List.Types.ACTIVE;
     }
 
     return sails.helpers.lists.getMany(criteria);

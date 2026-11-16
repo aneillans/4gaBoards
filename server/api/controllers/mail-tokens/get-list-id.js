@@ -74,7 +74,7 @@ module.exports = {
       };
     }
 
-    const lists = await sails.helpers.boards.getLists(board.id);
+    const lists = await sails.helpers.boards.getLists.with({ idOrIds: board.id, onlyActive: true });
 
     return {
       item: {

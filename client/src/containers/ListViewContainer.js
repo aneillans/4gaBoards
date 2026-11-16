@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import ListView from '../components/Board/ListView';
-import { BoardMembershipRoles } from '../constants/Enums';
+import { BoardContexts, BoardMembershipRoles } from '../constants/Enums';
 import entryActions from '../entry-actions';
 import { push } from '../lib/redux-router';
 import selectors from '../selectors';
@@ -61,7 +61,7 @@ const makeMapStateToProps = () => {
       };
     });
 
-    const { isGithubConnected, githubRepo } = selectors.selectCurrentBoard(state);
+    const { isGithubConnected, githubRepo, context } = selectors.selectCurrentBoard(state);
     const lists = listIds.map((id) => {
       return selectors.selectListById(state, id);
     });
@@ -92,7 +92,8 @@ const makeMapStateToProps = () => {
       selfAssignBySpacebar,
       rightClickContextMenu,
       currentCardIndex,
-      canEdit: isCurrentUserEditor,
+      // Archive and trash take no new lists or cards
+      canEdit: isCurrentUserEditor && context === BoardContexts.BOARD,
       preferredDetailsFont,
       pathname,
       currentUserId,

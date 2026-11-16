@@ -72,7 +72,7 @@ module.exports = {
         name: templateName,
         isGlobal: inputs.isGlobal,
         data: {
-          lists: lists.map((list) => _.pick(list, ['position', 'name', 'isCollapsed', 'isCompleted'])),
+          lists: lists.filter((list) => !sails.helpers.lists.isSpecial(list)).map((list) => _.pick(list, ['position', 'name', 'isCollapsed', 'isCompleted'])),
           labels: labels.map((label) => _.pick(label, ['name', 'color'])),
         },
       },

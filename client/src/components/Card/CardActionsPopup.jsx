@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 
+import { ListTypes } from '../../constants/Enums';
 import { useSteps } from '../../hooks';
 import { ActivityStep } from '../ActivityPopup';
 import CardMoveStep from '../CardMoveStep';
@@ -28,6 +29,7 @@ const StepTypes = {
 const CardActionsStep = React.memo(
   ({
     card,
+    listContext,
     projectsToLists,
     allBoardMemberships,
     boardMemberships,
@@ -64,6 +66,18 @@ const CardActionsStep = React.memo(
   }) => {
     const [t] = useTranslation();
     const [step, openStep, handleBack] = useSteps();
+
+    const listType = listContext ? listContext.listType : ListTypes.ACTIVE;
+    const isInSpecialList = listType === ListTypes.ARCHIVE || listType === ListTypes.TRASH;
+    const restoreListName = listContext && listContext.restoreListName && (listContext.restoreListName.startsWith('common.') ? t(listContext.restoreListName) : listContext.restoreListName);
+
+    const handleMoveToListClick = useCallback(
+      (listId) => () => {
+        onMove(listId);
+        onClose();
+      },
+      [onMove, onClose],
+    );
 
     const handleEditNameClick = useCallback(() => {
       onNameEdit();
@@ -216,7 +230,7 @@ const CardActionsStep = React.memo(
 
     return (
       <>
-        {canEdit && (
+        {canEdit && !isInSpecialList && (
           <Button variant={ButtonVariant.PopupContext} title={card.isCompleted ? t('common.markAsNotDone') : t('common.markAsDone')} onClick={handleToggleCompletedClick}>
             <Icon type={card.isCompleted ? IconType.Reset : IconType.Check} size={IconSize.Size13} className={s.icon} />
             {card.isCompleted ? t('common.markAsNotDone') : t('common.markAsDone')}
@@ -258,7 +272,7 @@ const CardActionsStep = React.memo(
             {t('common.moveCard', { context: 'title' })}
           </Button>
         )}
-        {canEdit && (
+        {canEdit && !isInSpecialList && (
           <Button variant={ButtonVariant.PopupContext} title={t('common.duplicateCard', { context: 'title' })} onClick={handleDuplicateClick}>
             <Icon type={IconType.Duplicate} size={IconSize.Size13} className={s.icon} />
             {t('common.duplicateCard', { context: 'title' })}
@@ -273,10 +287,28 @@ const CardActionsStep = React.memo(
           {t('common.checkActivity', { context: 'title' })}
         </Button>
         {canEdit && <Popup.Separator />}
-        {canEdit && (
-          <Button variant={ButtonVariant.PopupContext} title={t('common.deleteCard', { context: 'title' })} onClick={handleDeleteClick}>
+        {canEdit && isInSpecialList && listContext.restoreListId && (
+          <Button variant={ButtonVariant.PopupContext} title={t('common.restoreCardToList', { list: restoreListName })} onClick={handleMoveToListClick(listContext.restoreListId)}>
+            <Icon type={IconType.Reset} size={IconSize.Size13} className={s.icon} />
+            {t('common.restoreCardToList', { list: restoreListName })}
+          </Button>
+        )}
+        {canEdit && listType !== ListTypes.ARCHIVE && listContext && listContext.archiveListId && (
+          <Button variant={ButtonVariant.PopupContext} title={t('common.archiveCard')} onClick={handleMoveToListClick(listContext.archiveListId)}>
+            <Icon type={IconType.Archive} size={IconSize.Size13} className={s.icon} />
+            {t('common.archiveCard')}
+          </Button>
+        )}
+        {canEdit && listType !== ListTypes.TRASH && listContext && listContext.trashListId && (
+          <Button variant={ButtonVariant.PopupContext} title={t('common.moveCardToTrash')} onClick={handleMoveToListClick(listContext.trashListId)}>
             <Icon type={IconType.Trash} size={IconSize.Size13} className={s.icon} />
-            {t('common.deleteCard', { context: 'title' })}
+            {t('common.moveCardToTrash')}
+          </Button>
+        )}
+        {canEdit && (listType === ListTypes.TRASH || !listContext || !listContext.trashListId) && (
+          <Button variant={ButtonVariant.PopupContext} title={t('common.deleteCardPermanently')} onClick={handleDeleteClick}>
+            <Icon type={IconType.Trash} size={IconSize.Size13} className={s.icon} />
+            {t('common.deleteCardPermanently')}
           </Button>
         )}
       </>
@@ -286,6 +318,7 @@ const CardActionsStep = React.memo(
 
 CardActionsStep.propTypes = {
   card: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  listContext: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   projectsToLists: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   allBoardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
   boardMemberships: PropTypes.array.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -322,6 +355,7 @@ CardActionsStep.propTypes = {
 };
 
 CardActionsStep.defaultProps = {
+  listContext: null,
   createdAt: undefined,
   createdBy: undefined,
   updatedAt: undefined,
