@@ -32,6 +32,7 @@ const VARIANTS = {
 const Task = React.memo(
   ({
     cardId,
+    dndScopeId,
     cardName,
     variant,
     id,
@@ -75,7 +76,7 @@ const Task = React.memo(
     const taskMembershipsPopupRef = useRef(null);
 
     const isDragging = useTaskDropSlot((slot) => slot?.taskId === id && slot.variant === variant);
-    const placeholderHeight = useTaskDropSlot((slot) => (slot && slot.cardId === cardId && slot.variant === variant && slot.placeholderIndex === index ? slot.height : null));
+    const placeholderHeight = useTaskDropSlot((slot) => (slot && slot.cardId === dndScopeId && slot.variant === variant && slot.placeholderIndex === index ? slot.height : null));
     const userDropPlaceholder = useUserDropSlot((slot) => (slot && slot.taskId === id && slot.target === `${DroppableTypes.TASK}-${variant}` ? slot.user : null));
     const droppedUserId = useUserDropped((slot) => (slot && slot.taskId === id && slot.target === `${DroppableTypes.TASK}-${variant}` ? slot.userId : null));
     const key = dragKey(DroppableTypes.TASK, `${variant}:${id}`); // Key contains variant because there could be 2 instances of tasks at the same time
@@ -94,7 +95,7 @@ const Task = React.memo(
         return undefined;
       }
 
-      const data = { type: DroppableTypes.TASK, taskId: id, cardId, variant, index };
+      const data = { type: DroppableTypes.TASK, taskId: id, cardId: dndScopeId, variant, index };
 
       return combine(
         draggable({
@@ -114,7 +115,7 @@ const Task = React.memo(
         firefoxDndFix(wrapper),
         dropTargetForElements({
           element: wrapper,
-          canDrop: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === cardId && source.data.variant === variant,
+          canDrop: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === dndScopeId && source.data.variant === variant,
           getData: ({ input }) =>
             attachClosestEdge(data, {
               input,
@@ -123,7 +124,7 @@ const Task = React.memo(
             }),
         }),
       );
-    }, [id, cardId, variant, index, isPersisted, canEdit, key]);
+    }, [id, dndScopeId, variant, index, isPersisted, canEdit, key]);
 
     useDropAnimation(taskRef, key);
 
@@ -334,6 +335,7 @@ const Task = React.memo(
 
 Task.propTypes = {
   cardId: PropTypes.string.isRequired,
+  dndScopeId: PropTypes.string.isRequired,
   cardName: PropTypes.string.isRequired,
   variant: PropTypes.oneOf(Object.values(VARIANTS)).isRequired,
   id: PropTypes.string.isRequired,

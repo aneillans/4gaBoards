@@ -41,8 +41,15 @@ module.exports = {
   async fn(inputs) {
     const { values, currentUser, skipMetaUpdate } = inputs;
 
+    // Moving between task lists of the same card needs a position in the target list
+    const taskListId = values.taskListId || inputs.record.taskListId;
+    if (values.taskListId && values.taskListId !== inputs.record.taskListId && _.isUndefined(values.position)) {
+      const [lastTask] = await Task.find({ taskListId }).sort('position DESC').limit(1);
+      values.position = (lastTask?.position || 0) + sails.config.custom.positionGap;
+    }
+
     if (!_.isUndefined(values.position)) {
-      const tasks = await sails.helpers.cards.getTasks(inputs.record.cardId, inputs.record.id);
+      const tasks = taskListId ? await Task.find({ taskListId, id: { '!=': inputs.record.id } }).sort('position') : await sails.helpers.cards.getTasks(inputs.record.cardId, inputs.record.id);
 
       const { position, repositions } = sails.helpers.utils.insertToPositionables(values.position, tasks);
 

@@ -1,0 +1,42 @@
+:global(#app) {
+  .taskList {
+    margin-bottom: 10px;
+  }
+
+  .taskListHeader {
+    align-items: center;
+    color: var(--text1);
+    display: flex;
+    font-size: 13px;
+    font-weight: bold;
+    gap: 6px;
+    margin: 4px 0 2px;
+  }
+
+  .taskListName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .taskListCount {
+    font-weight: normal;
+    opacity: 0.8;
+  }
+
+  .hiddenCount {
+    font-size: 12px;
+    font-weight: normal;
+    opacity: 0.7;
+  }
+
+  .addTaskList {
+    font-size: 12px;
+    margin-top: 2px;
+    width: auto;
+  }
+
+  .icon {
+    margin-right: 6px;
+  }
+}

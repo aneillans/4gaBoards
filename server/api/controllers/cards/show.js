@@ -38,6 +38,7 @@ module.exports = {
 
     const cardMemberships = await sails.helpers.cards.getCardMemberships(card.id);
     const cardLabels = await sails.helpers.cards.getCardLabels(card.id);
+    const taskLists = await TaskList.find({ cardId: card.id }).sort('position');
     const tasks = await sails.helpers.cards.getTasks(card.id);
     const attachments = await sails.helpers.cards.getAttachments(card.id);
 
@@ -46,6 +47,7 @@ module.exports = {
       included: {
         cardMemberships,
         cardLabels,
+        taskLists,
         tasks,
         attachments,
       },

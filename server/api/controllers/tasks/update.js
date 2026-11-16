@@ -18,6 +18,10 @@ module.exports = {
       regex: /^[0-9]+$/,
       required: true,
     },
+    taskListId: {
+      type: 'string',
+      regex: /^[0-9]+$/,
+    },
     position: {
       type: 'number',
     },
@@ -65,7 +69,12 @@ module.exports = {
       throw Errors.NOT_ENOUGH_RIGHTS;
     }
 
-    const values = _.pick(inputs, ['position', 'name', 'isCompleted', 'dueDate']);
+    const values = _.pick(inputs, ['position', 'name', 'isCompleted', 'dueDate', 'taskListId']);
+
+    // Tasks can move between the task lists of their own card only
+    if (values.taskListId && !(await TaskList.findOne({ id: values.taskListId, cardId: task.cardId }))) {
+      throw Errors.NOT_ENOUGH_RIGHTS;
+    }
 
     task = await sails.helpers.tasks.updateOne.with({
       values,

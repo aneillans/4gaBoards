@@ -160,6 +160,18 @@ const createSocketEventsChannel = () =>
       emit(entryActions.handleUserFromTaskRemove(item));
     };
 
+    const handleTaskListCreate = api.makeHandleTaskListCreate(({ item }) => {
+      emit(entryActions.handleTaskListCreate(item));
+    });
+
+    const handleTaskListUpdate = api.makeHandleTaskListUpdate(({ item }) => {
+      emit(entryActions.handleTaskListUpdate(item));
+    });
+
+    const handleTaskListDelete = api.makeHandleTaskListDelete(({ item }) => {
+      emit(entryActions.handleTaskListDelete(item));
+    });
+
     const handleTaskCreate = api.makeHandleTaskCreate(({ item }) => {
       emit(entryActions.handleTaskCreate(item));
     });
@@ -302,6 +314,9 @@ const createSocketEventsChannel = () =>
     socket.on('taskMembershipCreate', handleUserToTaskAdd);
     socket.on('taskMembershipDelete', handleUserFromTaskRemove);
 
+    socket.on('taskListCreate', handleTaskListCreate);
+    socket.on('taskListUpdate', handleTaskListUpdate);
+    socket.on('taskListDelete', handleTaskListDelete);
     socket.on('taskCreate', handleTaskCreate);
     socket.on('taskUpdate', handleTaskUpdate);
     socket.on('taskDuplicate', handleTaskDuplicate);
@@ -386,6 +401,9 @@ const createSocketEventsChannel = () =>
       socket.off('taskMembershipCreate', handleUserToTaskAdd);
       socket.off('taskMembershipDelete', handleUserFromTaskRemove);
 
+      socket.off('taskListCreate', handleTaskListCreate);
+      socket.off('taskListUpdate', handleTaskListUpdate);
+      socket.off('taskListDelete', handleTaskListDelete);
       socket.off('taskCreate', handleTaskCreate);
       socket.off('taskUpdate', handleTaskUpdate);
       socket.off('taskDuplicate', handleTaskDuplicate);

@@ -59,6 +59,7 @@ export function* handleProjectManagerCreate(projectManager) {
   let cardMemberships;
   let cardLabels;
   let tasks;
+  let taskLists;
   let taskMemberships;
   let attachments;
   let notifications;
@@ -84,7 +85,7 @@ export function* handleProjectManagerCreate(projectManager) {
     } catch {} // eslint-disable-line no-empty
 
     if (body && body.project && body.project.id === projectManager.projectId) {
-      ({ project, board, users: users2, boardMemberships: boardMemberships2, labels, lists, cards, cardMemberships, cardLabels, tasks, taskMemberships, attachments } = body);
+      ({ project, board, users: users2, boardMemberships: boardMemberships2, labels, lists, cards, cardMemberships, cardLabels, taskLists, tasks, taskMemberships, attachments } = body);
 
       if (body.card) {
         notifications = yield select(selectors.selectNotificationsByCardId, body.card.id);
@@ -119,6 +120,7 @@ export function* handleProjectManagerCreate(projectManager) {
       mailTokens,
     ),
   );
+  yield put(actions.receiveTaskLists(taskLists || []));
 }
 
 export function* deleteProjectManager(id) {

@@ -18,6 +18,7 @@ import projectMemberships from './project-memberships';
 import projects from './projects';
 import router from './router';
 import socket from './socket';
+import taskLists from './task-lists';
 import tasks from './tasks';
 import userPrefs from './user-prefs';
 import users from './users';
@@ -43,6 +44,7 @@ export default {
   ...projects,
   ...router,
   ...socket,
+  ...taskLists,
   ...tasks,
   ...userPrefs,
   ...users,

@@ -51,11 +51,12 @@ const handleTaskDuplicate = (task) => ({
   },
 });
 
-const moveTask = (id, index) => ({
+const moveTask = (id, index, taskListId) => ({
   type: EntryActionTypes.TASK_MOVE,
   payload: {
     id,
     index,
+    taskListId,
   },
 });
 

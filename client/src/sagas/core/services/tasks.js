@@ -10,9 +10,12 @@ import { addUserToTask } from './users';
 export function* createTask(cardId, data) {
   const { userIds, ...restData } = data;
 
+  const taskListId = restData.taskListId || (yield select(selectors.selectFirstTaskListIdByCardId, cardId)) || undefined;
+
   const nextData = {
     ...restData,
-    position: yield select(selectors.selectNextTaskPosition, cardId),
+    ...(taskListId && { taskListId }),
+    position: yield select(selectors.selectNextTaskPosition, cardId, undefined, undefined, taskListId),
   };
 
   const localId = yield call(createLocalId);
@@ -97,12 +100,15 @@ export function* handleTaskDuplicate(task) {
   yield put(actions.handleTaskDuplicate(task));
 }
 
-export function* moveTask(id, index) {
-  const { cardId } = yield select(selectors.selectTaskById, id);
-  const position = yield select(selectors.selectNextTaskPosition, cardId, index, id);
+// Moves a task within its list, or into another list of the same card when taskListId is given
+export function* moveTask(id, index, taskListId) {
+  const task = yield select(selectors.selectTaskById, id);
+  const targetTaskListId = taskListId || task.taskListId;
+  const position = yield select(selectors.selectNextTaskPosition, task.cardId, index, id, targetTaskListId);
 
   yield call(updateTask, id, {
     position,
+    ...(targetTaskListId !== task.taskListId && { taskListId: targetTaskListId }),
   });
 }
 

@@ -46,6 +46,10 @@ module.exports = {
       required: true,
       columnName: 'card_id',
     },
+    taskListId: {
+      model: 'TaskList',
+      columnName: 'task_list_id',
+    },
     memberUsers: {
       collection: 'User',
       via: 'taskId',

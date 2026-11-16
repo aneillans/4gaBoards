@@ -25,6 +25,7 @@ const Tasks = React.forwardRef(
   (
     {
       cardId,
+      dndScopeId,
       cardName,
       variant,
       isCardActive,
@@ -56,8 +57,10 @@ const Tasks = React.forwardRef(
     const tasksRef = useRef(null);
     const [isOpen, toggleOpen] = useToggle();
     const tasksCount = items.length;
+    // Drag and drop stays within one task list in the card modal, within the card elsewhere
+    const scopeId = dndScopeId || cardId;
 
-    const placeholderHeight = useTaskDropSlot((slot) => (slot && slot.cardId === cardId && slot.variant === variant && slot.placeholderIndex >= tasksCount ? slot.height : null));
+    const placeholderHeight = useTaskDropSlot((slot) => (slot && slot.cardId === scopeId && slot.variant === variant && slot.placeholderIndex >= tasksCount ? slot.height : null));
 
     const handleToggleClick = useCallback(() => {
       toggleOpen();
@@ -78,7 +81,7 @@ const Tasks = React.forwardRef(
     useEffect(() => {
       const cleanups = [
         monitorForElements({
-          canMonitor: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === cardId && source.data.variant === variant,
+          canMonitor: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === scopeId && source.data.variant === variant,
           onDragStart: ({ source, location }) => setTaskDropSlot(resolveTaskDropSlot(source, location)),
           onDrag: ({ source, location }) => setTaskDropSlot(resolveTaskDropSlot(source, location)),
           onDrop: ({ source, location }) => {
@@ -90,21 +93,21 @@ const Tasks = React.forwardRef(
             }
           },
         }),
-        () => clearTaskDropSlot(cardId, variant),
+        () => clearTaskDropSlot(scopeId, variant),
       ];
 
       if (tasksRef.current) {
         cleanups.push(
           dropTargetForElements({
             element: tasksRef.current,
-            canDrop: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === cardId && source.data.variant === variant,
-            getData: () => ({ type: DroppableTypes.TASK, cardId, variant, endIndex: tasksCount }),
+            canDrop: ({ source }) => source.data.type === DroppableTypes.TASK && source.data.cardId === scopeId && source.data.variant === variant,
+            getData: () => ({ type: DroppableTypes.TASK, cardId: scopeId, variant, endIndex: tasksCount }),
           }),
         );
       }
 
       return combine(...cleanups);
-    }, [cardId, variant, tasksCount, isOpen, onMove]);
+    }, [scopeId, variant, tasksCount, isOpen, onMove]);
 
     const handleUpdate = useCallback(
       (id, data) => {
@@ -143,6 +146,7 @@ const Tasks = React.forwardRef(
           {items.map((item, index) => (
             <Task
               cardId={cardId}
+              dndScopeId={scopeId}
               cardName={cardName}
               variant={variant}
               key={item.id}
@@ -227,6 +231,7 @@ const Tasks = React.forwardRef(
 
 Tasks.propTypes = {
   cardId: PropTypes.string.isRequired,
+  dndScopeId: PropTypes.string,
   cardName: PropTypes.string.isRequired,
   variant: PropTypes.oneOf(Object.values(VARIANTS)).isRequired,
   isCardActive: PropTypes.bool,
@@ -253,6 +258,7 @@ Tasks.propTypes = {
 };
 
 Tasks.defaultProps = {
+  dndScopeId: undefined,
   isCardActive: false,
   closestDueDate: undefined,
   onMouseEnterTasks: () => {},

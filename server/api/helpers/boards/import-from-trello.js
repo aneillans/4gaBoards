@@ -40,12 +40,6 @@ module.exports = {
 
     const getTrelloCardsOfList = (listId) => inputs.trelloBoard.cards.filter((card) => card.idList === listId && !card.closed);
 
-    const getAllTrelloCheckItemsOfCard = (cardId) =>
-      inputs.trelloBoard.checklists
-        .filter((checklist) => checklist.idCard === cardId)
-        .map((checklist) => checklist.checkItems)
-        .flat();
-
     const getTrelloCommentsOfCard = (cardId) => inputs.trelloBoard.actions.filter((action) => action.type === 'commentCard' && action.data && action.data.card && action.data.card.id === cardId);
 
     const importCardLabels = async (boardsCard, trelloCard) => {
@@ -60,17 +54,31 @@ module.exports = {
       );
     };
 
+    // Each Trello checklist becomes a task list with its own check items as tasks
     const importTasks = async (boardsCard, trelloCard) => {
-      // TODO find workaround for tasks/checklist mismapping, see issue trello2planka#5
+      const trelloChecklists = inputs.trelloBoard.checklists.filter((checklist) => checklist.idCard === trelloCard.id);
+
       return Promise.all(
-        getAllTrelloCheckItemsOfCard(trelloCard.id).map(async (trelloCheckItem) => {
-          return Task.create({
+        trelloChecklists.map(async (trelloChecklist) => {
+          const taskList = await TaskList.create({
             cardId: boardsCard.id,
-            position: trelloCheckItem.pos,
-            name: trelloCheckItem.name,
-            isCompleted: trelloCheckItem.state === 'complete',
+            position: trelloChecklist.pos,
+            name: trelloChecklist.name,
             createdById: currentUser.id,
           }).fetch();
+
+          return Promise.all(
+            trelloChecklist.checkItems.map((trelloCheckItem) =>
+              Task.create({
+                cardId: boardsCard.id,
+                taskListId: taskList.id,
+                position: trelloCheckItem.pos,
+                name: trelloCheckItem.name,
+                isCompleted: trelloCheckItem.state === 'complete',
+                createdById: currentUser.id,
+              }).fetch(),
+            ),
+          );
         }),
       );
     };

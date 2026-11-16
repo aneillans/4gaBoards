@@ -31,6 +31,7 @@ export function* handleSocketReconnect() {
     cardMemberships,
     cardLabels,
     tasks,
+    taskLists,
     taskMemberships,
     attachments,
     activities,
@@ -65,6 +66,7 @@ export function* handleSocketReconnect() {
       apiClients,
     ),
   );
+  yield put(actions.receiveTaskLists(taskLists || []));
 }
 
 export default {

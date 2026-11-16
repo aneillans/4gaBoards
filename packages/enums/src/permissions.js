@@ -77,6 +77,10 @@ const Permissions = {
   MAILTOKEN_UPDATE: 'mail-tokens.update',
   MAILTOKEN_DELETE: 'mail-tokens.delete',
 
+  TASKLIST_CREATE: 'task-lists.create',
+  TASKLIST_UPDATE: 'task-lists.update',
+  TASKLIST_DELETE: 'task-lists.delete',
+
   TASK_CREATE: 'tasks.create',
   TASK_UPDATE: 'tasks.update',
   TASK_DUPLICATE: 'tasks.duplicate',

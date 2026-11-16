@@ -80,13 +80,14 @@ export function* fetchBoard(id) {
   let cardMemberships;
   let cardLabels;
   let tasks;
+  let taskLists;
   let taskMemberships;
   let attachments;
 
   try {
     ({
       item: board,
-      included: { users, projects, boardMemberships, labels, lists, mailTokens, cards, cardMemberships, cardLabels, tasks, taskMemberships, attachments },
+      included: { users, projects, boardMemberships, labels, lists, mailTokens, cards, cardMemberships, cardLabels, taskLists, tasks, taskMemberships, attachments },
     } = yield call(request, api.getBoard, id, true));
   } catch (error) {
     yield put(actions.fetchBoard.failure(id, error));
@@ -94,6 +95,7 @@ export function* fetchBoard(id) {
   }
 
   yield put(actions.fetchBoard.success(board, users, projects, boardMemberships, labels, lists, mailTokens, cards, cardMemberships, cardLabels, tasks, taskMemberships, attachments));
+  yield put(actions.receiveTaskLists(taskLists || []));
 }
 
 export function* updateBoard(id, data) {
