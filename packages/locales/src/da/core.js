@@ -306,6 +306,7 @@ export default {
       enterGithubRepository: 'Indtast GitHub-repository... <Ejer/Repo>',
       enterLabelName: 'Indtast etiketnavn...',
       enterListName: 'Indtast listenavn...',
+      enterProjectDescription: 'Indtast projektbeskrivelse...',
       enterProjectName: 'Indtast projektnavn...',
       enterSystemNotificationTags: 'Indtast tags adskilt med kommaer...',
       enterTaskDescription: 'Indtast opgavebeskrivelse...',

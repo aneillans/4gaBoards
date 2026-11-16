@@ -306,6 +306,7 @@ export default {
       enterGithubRepository: 'Preencha o repositório do GitHub... <Proprietário/Repositório>',
       enterLabelName: 'Preencha o nome do rótulo...',
       enterListName: 'Preencha o nome da lista...',
+      enterProjectDescription: 'Digite a descrição do projeto...',
       enterProjectName: 'Preencha o nome do projeto...',
       enterSystemNotificationTags: 'Informe tags separadas por vírgulas...',
       enterTaskDescription: 'Preencha a descrição da tarefa...',

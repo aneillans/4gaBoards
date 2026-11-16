@@ -123,6 +123,7 @@ const Project = React.memo(
             </div>
           </div>
         </div>
+        {currentProject?.description && <div className={s.description}>{currentProject.description}</div>}
         <div className={clsx(s.boardsWrapper, gs.scrollableY, currentProject?.boards.length === 0 && s.boardsWrapperEmpty)}>
           {currentFilteredProject?.boards.map((item) => (
             <ProjectBoard

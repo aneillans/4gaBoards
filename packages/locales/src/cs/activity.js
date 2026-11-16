@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: 'Odebrán <user>{{user}}</user> ze správců projektu <project>{{project}}</project>',
       projectManagerRemoveShort: 'Odebrán <user>{{user}}</user> ze správců tohoto projektu',
       projectShort: 'Projekt',
+      projectUpdateDescription: 'Aktualizován popis projektu <project>{{project}}</project>',
+      projectUpdateDescriptionShort: 'Aktualizován popis tohoto projektu',
       projectUpdateName: 'Projekt <prevProject>{{prevProject}}</prevProject> aktualizován na <project>{{project}}</project>',
       projectUpdateNameShort: 'Projekt <prevProject>{{prevProject}}</prevProject> aktualizován na <project>{{project}}</project>',
       task: 'Úkol',

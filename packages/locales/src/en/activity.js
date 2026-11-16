@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: 'Removed <user>{{user}}</user> from managers of project <project>{{project}}</project>',
       projectManagerRemoveShort: 'Removed <user>{{user}}</user> from managers of this project',
       projectShort: 'Project',
+      projectUpdateDescription: 'Updated project <project>{{project}}</project> description',
+      projectUpdateDescriptionShort: 'Updated this project description',
       projectUpdateName: 'Updated project <prevProject>{{prevProject}}</prevProject> to <project>{{project}}</project>',
       projectUpdateNameShort: 'Updated project <prevProject>{{prevProject}}</prevProject> to <project>{{project}}</project>',
       task: 'Task',

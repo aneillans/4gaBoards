@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: '<project>{{project}}</project> 프로젝트 관리자에서 <user>{{user}}</user> 제거',
       projectManagerRemoveShort: '이 프로젝트 관리자에서 <user>{{user}}</user> 제거',
       projectShort: '프로젝트',
+      projectUpdateDescription: '<project>{{project}}</project> 프로젝트 설명 업데이트',
+      projectUpdateDescriptionShort: '이 프로젝트 설명 업데이트',
       projectUpdateName: '<prevProject>{{prevProject}}</prevProject> 프로젝트 이름 업데이트 to <project>{{project}}</project>',
       projectUpdateNameShort: '<prevProject>{{prevProject}}</prevProject> 프로젝트 이름 업데이트 to <project>{{project}}</project>',
       task: '작업',

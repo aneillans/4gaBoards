@@ -15,6 +15,15 @@
     justify-content: space-between;
   }
 
+  .description {
+    color: var(--text1);
+    font-size: 13px;
+    margin: -4px 20px 10px;
+    text-align: center;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
   .headerText {
     padding: 0 2px;
     display: inline;

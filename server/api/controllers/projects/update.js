@@ -41,6 +41,11 @@ module.exports = {
       type: 'string',
       isNotEmptyString: true,
     },
+    description: {
+      type: 'string',
+      allowNull: true,
+      maxLength: 4096,
+    },
     background: {
       type: 'json',
       custom: backgroundValidator,
@@ -72,7 +77,11 @@ module.exports = {
       throw Errors.PROJECT_NOT_FOUND;
     }
 
-    const values = _.pick(inputs, ['name', 'background', 'backgroundImage']);
+    const values = _.pick(inputs, ['name', 'description', 'background', 'backgroundImage']);
+
+    if (values.description !== undefined) {
+      values.description = values.description && values.description.trim() ? values.description.trim() : null;
+    }
 
     project = await sails.helpers.projects.updateOne.with({
       values,

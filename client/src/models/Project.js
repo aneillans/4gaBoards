@@ -12,6 +12,7 @@ export default class extends BaseModel {
     id: attr(),
     position: attr(),
     name: attr(),
+    description: attr(),
     background: attr(),
     backgroundImage: attr(),
     isCollapsed: attr(),

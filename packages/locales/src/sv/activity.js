@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: 'Tog bort <user>{{user}}</user> från ansvariga i projekt <project>{{project}}</project>',
       projectManagerRemoveShort: 'Tog bort <user>{{user}}</user> från ansvariga',
       projectShort: 'Projekt',
+      projectUpdateDescription: 'Uppdaterade beskrivningen för projekt <project>{{project}}</project>',
+      projectUpdateDescriptionShort: 'Uppdaterade beskrivningen för detta projekt',
       projectUpdateName: 'Bytte namn på projekt från <prevProject>{{prevProject}}</prevProject> till <project>{{project}}</project>',
       projectUpdateNameShort: 'Bytte namn från <prevProject>{{prevProject}}</prevProject> till <project>{{project}}</project>',
       task: 'Uppgift',

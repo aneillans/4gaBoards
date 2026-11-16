@@ -306,6 +306,7 @@ export default {
       enterGithubRepository: 'GitHub-Repository eingeben... <Owner/Repo>',
       enterLabelName: 'Label-Name eingeben...',
       enterListName: 'Listen-Name eingeben...',
+      enterProjectDescription: 'Projektbeschreibung eingeben...',
       enterProjectName: 'Projekt-Name eingeben...',
       enterSystemNotificationTags: 'Tags durch Kommas getrennt eingeben...',
       enterTaskDescription: 'Aufgaben-Beschreibung eingeben...',

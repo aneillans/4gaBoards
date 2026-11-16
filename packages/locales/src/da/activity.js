@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: 'Fjernede <user>{{user}}</user> fra ansvarlige i projekt <project>{{project}}</project>',
       projectManagerRemoveShort: 'Fjernede <user>{{user}}</user> fra ansvarlige i dette projekt',
       projectShort: 'Projekt',
+      projectUpdateDescription: 'Opdaterede beskrivelsen af projekt <project>{{project}}</project>',
+      projectUpdateDescriptionShort: 'Opdaterede beskrivelsen af dette projekt',
       projectUpdateName: 'Opdaterede projekt <prevProject>{{prevProject}}</prevProject> til <project>{{project}}</project>',
       projectUpdateNameShort: 'Opdaterede dette projekt fra <prevProject>{{prevProject}}</prevProject> til <project>{{project}}</project>',
       task: 'Opgave',

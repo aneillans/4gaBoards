@@ -18,6 +18,7 @@ const ProjectSettings = React.memo(
   ({
     projectId,
     name,
+    description,
     background,
     backgroundImage,
     isBackgroundImageUpdating,
@@ -62,7 +63,7 @@ const ProjectSettings = React.memo(
           <div className={s.actionsWrapper}>
             <div className={s.action}>
               <InformationEdit
-                defaultData={{ name }}
+                defaultData={{ name, description: description || '' }}
                 onUpdate={(data) => {
                   onUpdate(projectId, data);
                 }}
@@ -127,6 +128,7 @@ const ProjectSettings = React.memo(
 ProjectSettings.propTypes = {
   projectId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  description: PropTypes.string,
   background: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   backgroundImage: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   isBackgroundImageUpdating: PropTypes.bool.isRequired,
@@ -142,6 +144,7 @@ ProjectSettings.propTypes = {
 };
 
 ProjectSettings.defaultProps = {
+  description: null,
   background: undefined,
   backgroundImage: undefined,
 };

@@ -107,6 +107,7 @@ module.exports = {
             projectId: project.id,
             projectPrevName: values.name && inputs.record.name,
             projectName: project.name,
+            projectDescriptionUpdated: values.description !== undefined && values.description !== inputs.record.description ? true : undefined,
             projectPrevBackground: values.background !== undefined ? inputs.record.background : undefined,
             projectBackground: values.background !== undefined ? project.background : undefined,
             projectPrevBackgroundImage: values.backgroundImage !== undefined ? inputs.record.backgroundImage : undefined,

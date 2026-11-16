@@ -220,6 +220,8 @@ export default {
       projectManagerRemove: '将 <user>{{user}}</user> 从项目 <project>{{project}}</project> 的经理中移除',
       projectManagerRemoveShort: '将 <user>{{user}}</user> 从此项目的经理中移除',
       projectShort: '项目',
+      projectUpdateDescription: '更新了项目 <project>{{project}}</project> 的描述',
+      projectUpdateDescriptionShort: '更新了此项目的描述',
       projectUpdateName: '将项目 <prevProject>{{prevProject}}</prevProject> 更新为 <project>{{project}}</project>',
       projectUpdateNameShort: '将项目 <prevProject>{{prevProject}}</prevProject> 更新为 <project>{{project}}</project>',
       task: '任务',
