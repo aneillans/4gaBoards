@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const Errors = {
   BOARD_NOT_FOUND: {
     boardNotFound: 'Board not found',
@@ -24,6 +26,21 @@ module.exports = {
     githubRepo: {
       type: 'string',
     },
+    isPublic: {
+      type: 'boolean',
+    },
+    publicShowMembers: {
+      type: 'boolean',
+    },
+    publicShowComments: {
+      type: 'boolean',
+    },
+    publicShowActivity: {
+      type: 'boolean',
+    },
+    publicShowAttachments: {
+      type: 'boolean',
+    },
   },
 
   exits: {
@@ -47,7 +64,14 @@ module.exports = {
       throw Errors.BOARD_NOT_FOUND; // Forbidden
     }
 
-    const values = _.pick(inputs, ['position', 'name', 'isGithubConnected', 'githubRepo']);
+    const values = _.pick(inputs, ['position', 'name', 'isGithubConnected', 'githubRepo', 'isPublic', 'publicShowMembers', 'publicShowComments', 'publicShowActivity', 'publicShowAttachments']);
+
+    // A fresh public id on every publish, so a link revoked by going private never works again
+    if (values.isPublic === true && !board.isPublic) {
+      values.publicId = crypto.randomBytes(18).toString('base64url');
+    } else if (values.isPublic === false) {
+      values.publicId = null;
+    }
 
     board = await sails.helpers.boards.updateOne.with({
       values,

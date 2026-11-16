@@ -10,6 +10,7 @@ import { ConnectionsStep } from '../ConnectionsPopup';
 import DeleteStep from '../DeleteStep';
 import ExportStep from '../ExportStep';
 import MailTokenListStep from '../MailTokenListStep';
+import PublicBoardStep from '../PublicBoardStep';
 import RenameStep from '../RenameStep';
 import { Button, ButtonVariant, Icon, IconType, IconSize, Popup, withPopup } from '../Utils';
 
@@ -18,6 +19,7 @@ import * as s from './BoardActionsPopup.module.scss';
 const StepTypes = {
   RENAME: 'RENAME',
   GITHUB: 'GITHUB',
+  PUBLIC: 'PUBLIC',
   EXPORT: 'EXPORT',
   DELETE: 'DELETE',
   ACTIVITY: 'ACTIVITY',
@@ -34,6 +36,7 @@ const BoardActionsStep = React.memo(
     lastActivityId,
     defaultDataRename,
     defaultDataGithub,
+    defaultDataPublic,
     createdAt,
     createdBy,
     updatedAt,
@@ -129,6 +132,8 @@ const BoardActionsStep = React.memo(
           );
         case StepTypes.GITHUB:
           return <ConnectionsStep defaultData={defaultDataGithub} onUpdate={onUpdate} onBack={handleBack} onClose={onClose} />;
+        case StepTypes.PUBLIC:
+          return <PublicBoardStep defaultData={defaultDataPublic} onUpdate={onUpdate} onBack={handleBack} onClose={onClose} />;
         case StepTypes.EXPORT:
           return <ExportStep title={t('common.exportBoard', { context: 'title' })} onExport={onExport} onBack={handleBack} onClose={onClose} />;
         case StepTypes.DELETE:
@@ -214,6 +219,12 @@ const BoardActionsStep = React.memo(
           </Button>
         )}
         {isProjectManager && (
+          <Button variant={ButtonVariant.PopupContext} title={t('common.publicBoard', { context: 'title' })} onClick={() => openStep(StepTypes.PUBLIC)}>
+            <Icon type={IconType.Link} size={IconSize.Size13} className={s.icon} />
+            {t('common.publicBoard', { context: 'title' })}
+          </Button>
+        )}
+        {isProjectManager && (
           <Button variant={ButtonVariant.PopupContext} title={t('common.exportBoard', { context: 'title' })} onClick={() => openStep(StepTypes.EXPORT)}>
             <Icon type={IconType.Board} size={IconSize.Size13} className={s.icon} />
             {t('common.exportBoard', { context: 'title' })}
@@ -263,6 +274,7 @@ BoardActionsStep.propTypes = {
   lastActivityId: PropTypes.string,
   defaultDataRename: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   defaultDataGithub: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
+  defaultDataPublic: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   createdAt: PropTypes.instanceOf(Date),
   createdBy: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   updatedAt: PropTypes.instanceOf(Date),

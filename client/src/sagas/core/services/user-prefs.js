@@ -3,6 +3,7 @@ import { put, call, select } from 'redux-saga/effects';
 import actions from '../../../actions';
 import api from '../../../api';
 import selectors from '../../../selectors';
+import { isPublicView } from '../../../utils/public-board';
 import request from '../request';
 import { changeCoreLanguage } from './core';
 
@@ -13,6 +14,11 @@ export function* updateCurrentUserPrefs(data) {
   yield put(actions.updateUserPrefs(currentUserId, data));
   if ('language' in data) {
     yield call(changeCoreLanguage, data.language);
+  }
+
+  // Anonymous visitors have no stored preferences; changes last for the visit only
+  if (isPublicView()) {
+    return;
   }
 
   let userPrefs;

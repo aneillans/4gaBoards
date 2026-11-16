@@ -13,6 +13,24 @@ export default class extends BaseModel {
     name: attr(),
     isGithubConnected: attr(),
     githubRepo: attr(),
+    isPublic: attr({
+      getDefault: () => false,
+    }),
+    publicId: attr({
+      getDefault: () => null,
+    }),
+    publicShowMembers: attr({
+      getDefault: () => false,
+    }),
+    publicShowComments: attr({
+      getDefault: () => false,
+    }),
+    publicShowActivity: attr({
+      getDefault: () => false,
+    }),
+    publicShowAttachments: attr({
+      getDefault: () => false,
+    }),
     cardTotal: attr({
       getDefault: () => 0,
     }),

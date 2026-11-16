@@ -31,5 +31,6 @@ module.exports.policies = {
   'assetlinks/show': true,
   'auth/*': true,
   'register/create': true,
+  'public-boards/*': true,
   'notifications/receive-system-notification': true,
 };

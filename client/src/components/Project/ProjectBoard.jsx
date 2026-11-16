@@ -79,6 +79,7 @@ const ProjectBoard = React.memo(
           lastActivityId={board.lastActivityId}
           defaultDataRename={pick(board, 'name')}
           defaultDataGithub={pick(board, ['isGithubConnected', 'githubRepo'])}
+          defaultDataPublic={pick(board, ['isPublic', 'publicId', 'publicShowMembers', 'publicShowComments', 'publicShowActivity', 'publicShowAttachments'])}
           createdAt={board.createdAt}
           createdBy={board.createdBy}
           updatedAt={board.updatedAt}

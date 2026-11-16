@@ -3,20 +3,20 @@ import { monitorForElements } from '@atlaskit/pragmatic-drag-and-drop/element/ad
 import PropTypes from 'prop-types';
 
 import DroppableTypes from '../../constants/DroppableTypes';
-import Paths from '../../constants/Paths';
 import BoardActionsContainer from '../../containers/BoardActionsContainer';
 import BoardViewContainer from '../../containers/BoardViewContainer';
 import CardModalContainer from '../../containers/CardModalContainer';
 import ListViewContainer from '../../containers/ListViewContainer';
 import { dropAnimation } from '../../lib/hooks/use-drop-animation';
 import { withPathView, getPathView, stripPathView } from '../../utils/path-view';
+import { getBoardPath, getCardPath } from '../../utils/public-board';
 
 import * as s from './Board.module.scss';
 
 const Board = React.memo(({ id, cardId, isCardModalOpened, pathname, pathView, defaultView, onNavigatePush, onNavigateReplace }) => {
   const viewMode = pathView || defaultView;
 
-  const setViewMode = useCallback((view) => onNavigatePush(withPathView(cardId ? Paths.CARDS.replace(':id', cardId) : Paths.BOARDS.replace(':id', id), view)), [onNavigatePush, id, cardId]);
+  const setViewMode = useCallback((view) => onNavigatePush(withPathView(cardId ? getCardPath(cardId) : getBoardPath(id), view)), [onNavigatePush, id, cardId]);
 
   // Remove unknown/malformed view segments
   useEffect(() => {

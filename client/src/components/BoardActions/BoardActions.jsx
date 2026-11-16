@@ -6,6 +6,8 @@ import pick from 'lodash/pick';
 import PropTypes from 'prop-types';
 
 import Paths from '../../constants/Paths';
+import { isPublicView } from '../../utils/public-board';
+import ActivityPopup from '../ActivityPopup';
 import BoardActionsPopup from '../BoardActionsPopup';
 import CardSearch from '../CardSearch';
 import ConnectionsPopup from '../ConnectionsPopup';
@@ -68,6 +70,7 @@ const BoardActions = React.memo(
     onMailTokenDelete,
   }) => {
     const [t] = useTranslation();
+    const isPublic = isPublicView();
 
     const handleConnectionsUpdate = useCallback(
       (data) => {
@@ -84,25 +87,29 @@ const BoardActions = React.memo(
 
     return (
       <div className={clsx(s.wrapper, gs.scrollableX)}>
-        <Button variant={ButtonVariant.Icon} title={isSubscribed ? t('common.unsubscribe') : t('common.subscribe')} onClick={handleToggleSubscriptionClick} className={clsx(s.action, s.subscriptionButton)}>
-          <Icon type={isSubscribed ? IconType.Bell : IconType.BellEmpty} size={IconSize.Size14} />
-        </Button>
+        {!isPublic && (
+          <Button variant={ButtonVariant.Icon} title={isSubscribed ? t('common.unsubscribe') : t('common.subscribe')} onClick={handleToggleSubscriptionClick} className={clsx(s.action, s.subscriptionButton)}>
+            <Icon type={isSubscribed ? IconType.Bell : IconType.BellEmpty} size={IconSize.Size14} />
+          </Button>
+        )}
         <div title={board.name} className={clsx(s.title, s.action)}>
           {board.name}
         </div>
         <div className={clsx(s.cardsCount, s.action, s.cardsCountAction)}>
           {isFiltered ? t('common.ofCards', { filteredCount: filteredCardCount, count: cardCount }) : t('common.cards', { count: cardCount })}
         </div>
-        <div className={s.githubAction}>
-          <ConnectionsPopup defaultData={pick(board, ['isGithubConnected', 'githubRepo'])} onUpdate={handleConnectionsUpdate} offset={16}>
-            <Icon
-              type={IconType.GitHub}
-              size={IconSize.Size14}
-              className={clsx(board.isGithubConnected ? s.githubGreen : s.githubGrey)}
-              title={board.isGithubConnected ? t('common.connectedToGithub', { repo: board.githubRepo }) : t('common.notConnectedToGithub')}
-            />
-          </ConnectionsPopup>
-        </div>
+        {!isPublic && (
+          <div className={s.githubAction}>
+            <ConnectionsPopup defaultData={pick(board, ['isGithubConnected', 'githubRepo'])} onUpdate={handleConnectionsUpdate} offset={16}>
+              <Icon
+                type={IconType.GitHub}
+                size={IconSize.Size14}
+                className={clsx(board.isGithubConnected ? s.githubGreen : s.githubGrey)}
+                title={board.isGithubConnected ? t('common.connectedToGithub', { repo: board.githubRepo }) : t('common.notConnectedToGithub')}
+              />
+            </ConnectionsPopup>
+          </div>
+        )}
         <div className={s.action}>
           <Memberships
             items={memberships}
@@ -158,57 +165,83 @@ const BoardActions = React.memo(
           </div>
         )}
 
-        <div className={clsx(s.action, !isProjectManager && s.actionRightFirst)}>
-          <BoardActionsPopup
-            activities={board.activities}
-            isActivitiesFetching={board.isActivitiesFetching}
-            isAllActivitiesFetched={board.isAllActivitiesFetched}
-            lastActivityId={board.lastActivityId}
-            defaultDataRename={pick(board, 'name')}
-            defaultDataGithub={pick(board, ['isGithubConnected', 'githubRepo'])}
-            createdAt={board.createdAt}
-            createdBy={board.createdBy}
-            updatedAt={board.updatedAt}
-            updatedBy={board.updatedBy}
-            memberships={board.memberships}
-            templates={boardTemplates}
-            isProjectManager={isProjectManager}
-            canEdit={canEdit}
-            mailTokens={mailTokens}
-            mailTokenCount={mailTokenCount}
-            mailServiceAvailable={mailServiceAvailable}
-            mailServiceInboundEmail={mailServiceInboundEmail}
-            boardName={board.name}
-            isAdmin={isAdmin}
-            boardMembershipId={boardMembershipId}
-            hideCompletedLists={hideCompletedLists}
-            onMembershipUpdate={onMembershipUpdate}
-            onUpdate={(data) => onBoardUpdate(board.id, data)}
-            onExport={(data) => onBoardExport(board.id, data)}
-            onDelete={() => onBoardDelete(board.id)}
-            onActivitiesFetch={onActivitiesFetch}
-            onMailTokenCreate={onMailTokenCreate}
-            onMailTokenUpdate={onMailTokenUpdate}
-            onMailTokenDelete={onMailTokenDelete}
-            onTemplateCreate={(data) => onBoardTemplateCreate(board.id, data)}
-            onTemplateUpdate={onBoardTemplateUpdate}
-            onTemplateDelete={onBoardTemplateDelete}
-            position="right-start"
-            offset={10}
-            hideCloseButton
-          >
-            <Button variant={ButtonVariant.Icon} title={t('common.editBoard', { context: 'title' })}>
-              <Icon type={IconType.EllipsisVertical} size={IconSize.Size18} />
-            </Button>
-          </BoardActionsPopup>
-        </div>
-        <div className={clsx(s.action, s.actionRightLast)}>
-          <Link to={Paths.PROJECTS.replace(':id', projectId)}>
-            <Button variant={ButtonVariant.Icon} title={t('common.backToProject')}>
-              <Icon type={IconType.ArrowLeftBig} size={IconSize.Size18} />
-            </Button>
-          </Link>
-        </div>
+        {isPublic && board.publicShowActivity && (
+          <div className={clsx(s.action, s.actionRightFirst)}>
+            <ActivityPopup
+              title={t('common.activityFor', { name: board.name })}
+              activities={board.activities}
+              isFetching={board.isActivitiesFetching}
+              isAllFetched={board.isAllActivitiesFetched}
+              lastActivityId={board.lastActivityId}
+              hideBoardDetails
+              hideProjectDetails
+              onFetch={onActivitiesFetch}
+              position="right-start"
+              offset={10}
+              hideCloseButton
+            >
+              <Button variant={ButtonVariant.Icon} title={t('common.checkActivity', { context: 'title' })}>
+                <Icon type={IconType.Activity} size={IconSize.Size18} />
+              </Button>
+            </ActivityPopup>
+          </div>
+        )}
+        {!isPublic && (
+          <div className={clsx(s.action, !isProjectManager && s.actionRightFirst)}>
+            <BoardActionsPopup
+              activities={board.activities}
+              isActivitiesFetching={board.isActivitiesFetching}
+              isAllActivitiesFetched={board.isAllActivitiesFetched}
+              lastActivityId={board.lastActivityId}
+              defaultDataRename={pick(board, 'name')}
+              defaultDataGithub={pick(board, ['isGithubConnected', 'githubRepo'])}
+              defaultDataPublic={pick(board, ['isPublic', 'publicId', 'publicShowMembers', 'publicShowComments', 'publicShowActivity', 'publicShowAttachments'])}
+              createdAt={board.createdAt}
+              createdBy={board.createdBy}
+              updatedAt={board.updatedAt}
+              updatedBy={board.updatedBy}
+              memberships={board.memberships}
+              templates={boardTemplates}
+              isProjectManager={isProjectManager}
+              canEdit={canEdit}
+              mailTokens={mailTokens}
+              mailTokenCount={mailTokenCount}
+              mailServiceAvailable={mailServiceAvailable}
+              mailServiceInboundEmail={mailServiceInboundEmail}
+              boardName={board.name}
+              isAdmin={isAdmin}
+              boardMembershipId={boardMembershipId}
+              hideCompletedLists={hideCompletedLists}
+              onMembershipUpdate={onMembershipUpdate}
+              onUpdate={(data) => onBoardUpdate(board.id, data)}
+              onExport={(data) => onBoardExport(board.id, data)}
+              onDelete={() => onBoardDelete(board.id)}
+              onActivitiesFetch={onActivitiesFetch}
+              onMailTokenCreate={onMailTokenCreate}
+              onMailTokenUpdate={onMailTokenUpdate}
+              onMailTokenDelete={onMailTokenDelete}
+              onTemplateCreate={(data) => onBoardTemplateCreate(board.id, data)}
+              onTemplateUpdate={onBoardTemplateUpdate}
+              onTemplateDelete={onBoardTemplateDelete}
+              position="right-start"
+              offset={10}
+              hideCloseButton
+            >
+              <Button variant={ButtonVariant.Icon} title={t('common.editBoard', { context: 'title' })}>
+                <Icon type={IconType.EllipsisVertical} size={IconSize.Size18} />
+              </Button>
+            </BoardActionsPopup>
+          </div>
+        )}
+        {!isPublic && (
+          <div className={clsx(s.action, s.actionRightLast)}>
+            <Link to={Paths.PROJECTS.replace(':id', projectId)}>
+              <Button variant={ButtonVariant.Icon} title={t('common.backToProject')}>
+                <Icon type={IconType.ArrowLeftBig} size={IconSize.Size18} />
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     );
   },

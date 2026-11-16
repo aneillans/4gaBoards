@@ -55,6 +55,40 @@ export const selectPath = createReduxOrmSelector(
             projectId: boardModel.projectId,
           };
         }
+        case Paths.PUBLIC_BOARDS: {
+          const boardModel = Board.all()
+            .toModelArray()
+            .find((model) => model.publicId === pathsMatch.params.publicId);
+
+          if (!boardModel) {
+            return {
+              boardId: null,
+              projectId: null,
+            };
+          }
+
+          return {
+            boardId: boardModel.id,
+            projectId: boardModel.projectId,
+          };
+        }
+        case Paths.PUBLIC_CARDS: {
+          const cardModel = Card.withId(pathsMatch.params.id);
+
+          if (!cardModel || !cardModel.board || cardModel.board.publicId !== pathsMatch.params.publicId) {
+            return {
+              cardId: null,
+              boardId: null,
+              projectId: null,
+            };
+          }
+
+          return {
+            cardId: cardModel.id,
+            boardId: cardModel.boardId,
+            projectId: cardModel.board.projectId,
+          };
+        }
         case Paths.CARDS: {
           const cardModel = Card.withId(pathsMatch.params.id);
 

@@ -31,6 +31,10 @@ function Root({ store, history }) {
           <Route path={`${Paths.BOARDS}/:view`} element={<CoreContainer />} />
           <Route path={Paths.CARDS} element={<CoreContainer />} />
           <Route path={`${Paths.CARDS}/:view`} element={<CoreContainer />} />
+          <Route path={Paths.PUBLIC_BOARDS} element={<CoreContainer />} />
+          <Route path={`${Paths.PUBLIC_BOARDS}/:view`} element={<CoreContainer />} />
+          <Route path={Paths.PUBLIC_CARDS} element={<CoreContainer />} />
+          <Route path={`${Paths.PUBLIC_CARDS}/:view`} element={<CoreContainer />} />
           <Route path={Paths.SETTINGS} element={<CoreContainer />} />
           <Route path={Paths.SETTINGS_PROFILE} element={<CoreContainer />} />
           <Route path={Paths.SETTINGS_PREFERENCES} element={<CoreContainer />} />

@@ -8,13 +8,13 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
 import DroppableTypes from '../../constants/DroppableTypes';
-import Paths from '../../constants/Paths';
 import { useCardDropSlot } from '../../lib/hooks/use-card-drop-slot';
 import { dragKey, getDragData, useDropAnimation, hideIfPending } from '../../lib/hooks/use-drop-animation';
 import useSelfAssignBySpacebar from '../../lib/hooks/use-self-assign-by-spacebar';
 import { useUserDropSlot, useUserDropped, useUserDropTarget } from '../../lib/hooks/use-user-drop-slot';
 import firefoxDndFix from '../../utils/firefox-dnd-fix';
 import { withPathView, getPathView } from '../../utils/path-view';
+import { getCardPath } from '../../utils/public-board';
 import DueDate from '../DueDate';
 import DueDateEditPopup from '../DueDateEditPopup';
 import Label from '../Label';
@@ -147,7 +147,7 @@ const Card = React.memo(
           target = target.parentElement;
         }
 
-        onNavigatePush(withPathView(Paths.CARDS.replace(':id', id), getPathView(pathname) && 'board'));
+        onNavigatePush(withPathView(getCardPath(id), getPathView(pathname) && 'board'));
         if (document.activeElement) {
           document.activeElement.blur();
         }

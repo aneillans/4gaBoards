@@ -4,6 +4,7 @@ import actions from '../../../actions';
 import api from '../../../api';
 import selectors from '../../../selectors';
 import { createLocalId } from '../../../utils/local-id';
+import { getPublicBoardId, isPublicView } from '../../../utils/public-board';
 import request from '../request';
 
 export function* fetchCommentsInCard(cardId) {
@@ -18,7 +19,7 @@ export function* fetchCommentsInCard(cardId) {
     ({
       items: comments,
       included: { users },
-    } = yield call(request, api.getCardComments, cardId, { beforeId: lastId }));
+    } = yield isPublicView() ? call(api.getPublicCardComments, getPublicBoardId(), cardId, { beforeId: lastId }) : call(request, api.getCardComments, cardId, { beforeId: lastId }));
   } catch (error) {
     yield put(actions.fetchCommentsInCard.failure(cardId, error));
     return;

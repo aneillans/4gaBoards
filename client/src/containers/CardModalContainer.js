@@ -4,11 +4,11 @@ import { bindActionCreators } from 'redux';
 
 import CardModal from '../components/CardModal';
 import { BoardMembershipRoles } from '../constants/Enums';
-import Paths from '../constants/Paths';
 import entryActions from '../entry-actions';
 import { push } from '../lib/redux-router';
 import selectors from '../selectors';
 import { withPathView } from '../utils/path-view';
+import { getBoardPath } from '../utils/public-board';
 
 const makeMapStateToProps = () => {
   const selectAttachmentActivitiesById = selectors.makeSelectAttachmentActivitiesById();
@@ -206,7 +206,7 @@ const mapDispatchToProps = (dispatch) =>
 const mergeProps = (stateProps, dispatchProps) => ({
   ...stateProps,
   ...omit(dispatchProps, 'push'),
-  onClose: () => dispatchProps.push(withPathView(Paths.BOARDS.replace(':id', stateProps.boardId), stateProps.pathView)),
+  onClose: () => dispatchProps.push(withPathView(getBoardPath(stateProps.boardId), stateProps.pathView)),
 });
 
 export default connect(makeMapStateToProps, mapDispatchToProps, mergeProps)(CardModal);

@@ -16,9 +16,9 @@ import {
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 
-import Paths from '../../../constants/Paths';
 import { consumeSpaceKey } from '../../../lib/hooks/use-self-assign-by-spacebar';
 import { withPathView, getPathView } from '../../../utils/path-view';
+import { getCardPath } from '../../../utils/public-board';
 import CardAddPopup from '../../CardAddPopup';
 import ListAddPopup from '../../ListAddPopup';
 import { Button, ButtonVariant, Icon, IconType, IconSize, Table } from '../../Utils';
@@ -126,7 +126,7 @@ const ListView = React.memo(
           target = target.parentElement;
         }
 
-        onNavigatePush(withPathView(Paths.CARDS.replace(':id', id), getPathView(pathname) && 'list'));
+        onNavigatePush(withPathView(getCardPath(id), getPathView(pathname) && 'list'));
         if (document.activeElement) {
           document.activeElement.blur();
         }

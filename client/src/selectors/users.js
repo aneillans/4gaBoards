@@ -5,6 +5,7 @@ import orm from '../orm';
 import getActivityDetails from '../utils/get-activity-details';
 import getMeta from '../utils/get-meta';
 import { isLocalId } from '../utils/local-id';
+import { isPublicView } from '../utils/public-board';
 import { filterSidebarProjects } from '../utils/sidebar-filter';
 import { getMailTokens } from './helpers/mail-tokens';
 
@@ -207,9 +208,25 @@ export const selectManagedProjectsForCurrentUser = createSelector(
 export const selectProjectsToListsForCurrentUser = createSelector(
   orm,
   (state) => selectCurrentUserId(state),
-  ({ User }, id) => {
+  ({ User, Project }, id) => {
     if (!id) {
       return id;
+    }
+
+    // The anonymous viewer has no memberships; the store only holds the one public board
+    if (isPublicView()) {
+      return Project.all()
+        .toModelArray()
+        .map((projectModel) => ({
+          ...projectModel.ref,
+          boards: projectModel
+            .getOrderedBoardsQuerySet()
+            .toModelArray()
+            .map((boardModel) => ({
+              ...boardModel.ref,
+              lists: boardModel.getOrderedListsQuerySet().toRefArray(),
+            })),
+        }));
     }
 
     const userModel = User.withId(id);

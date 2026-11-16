@@ -3,7 +3,7 @@ const SEGMENTS = {
   list: 'list-view',
 };
 
-const REGEXP = /^(.*\/(?:boards|cards)\/[^/]+)\/([^/]+)\/?$/;
+const REGEXP = /^(.*\/(?:boards|cards|public-boards)\/[^/]+)\/([^/]+)\/?$/;
 
 export const getPathView = (pathname) => {
   const match = REGEXP.exec(pathname);

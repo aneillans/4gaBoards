@@ -9,12 +9,20 @@ import ProjectContainer from '../../containers/ProjectContainer';
 import ProjectsContainer from '../../containers/ProjectsContainer';
 import SettingsContainer from '../../containers/Settings/SettingsContainer';
 import SidebarContainer from '../../containers/SidebarContainer';
+import { isPublicView } from '../../utils/public-board';
 import { Loader, LoaderSize } from '../Utils';
 
 import * as s from './Static.module.scss';
 
+// Public boards are shown on their own, without the projects sidebar of the signed-in app
+// eslint-disable-next-line react/prop-types
+function PublicFrame({ children }) {
+  return <div className={s.publicContent}>{children}</div>;
+}
+
 function Static({ path, projectId, cardId, board }) {
   const [t] = useTranslation();
+  const Frame = isPublicView() ? PublicFrame : SidebarContainer;
   if (
     [
       Paths.SETTINGS,
@@ -31,9 +39,9 @@ function Static({ path, projectId, cardId, board }) {
   ) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer settingsOnly={path !== Paths.SETTINGS_PROJECT}>
+        <Frame settingsOnly={path !== Paths.SETTINGS_PROJECT}>
           <SettingsContainer />
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -41,9 +49,9 @@ function Static({ path, projectId, cardId, board }) {
   if (path === Paths.NOTIFICATIONS) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <NotificationCenterContainer />
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -51,9 +59,9 @@ function Static({ path, projectId, cardId, board }) {
   if (projectId === undefined) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <ProjectsContainer />
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -61,11 +69,11 @@ function Static({ path, projectId, cardId, board }) {
   if (cardId === null) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <div className={s.message}>
             <h1>{t('common.cardNotFound', { context: 'title' })}</h1>
           </div>
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -73,11 +81,11 @@ function Static({ path, projectId, cardId, board }) {
   if (board === null) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <div className={s.message}>
             <h1>{t('common.boardNotFound', { context: 'title' })}</h1>
           </div>
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -85,11 +93,11 @@ function Static({ path, projectId, cardId, board }) {
   if (projectId === null) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <div className={s.message}>
             <h1>{t('common.projectNotFound', { context: 'title' })}</h1>
           </div>
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -97,9 +105,9 @@ function Static({ path, projectId, cardId, board }) {
   if (board === undefined) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <ProjectContainer />
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
@@ -107,18 +115,18 @@ function Static({ path, projectId, cardId, board }) {
   if (board.isFetching) {
     return (
       <div className={s.wrapper}>
-        <SidebarContainer>
+        <Frame>
           <Loader size={LoaderSize.Massive} />
-        </SidebarContainer>
+        </Frame>
       </div>
     );
   }
 
   return (
     <div className={s.wrapper}>
-      <SidebarContainer>
+      <Frame>
         <BoardContainer />
-      </SidebarContainer>
+      </Frame>
     </div>
   );
 }
