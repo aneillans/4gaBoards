@@ -21,4 +21,8 @@
     height: calc(100vh - 50px);
     background: var(--backgroundColor);
   }
+
+  .wrapperWithBackground {
+    background: transparent;
+  }
 }
