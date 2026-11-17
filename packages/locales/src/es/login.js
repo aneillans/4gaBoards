@@ -12,7 +12,7 @@ export default {
       login: 'Iniciar sesión',
       logIn: 'Iniciar sesión',
       logInToBoards: 'Iniciar sesión',
-      newToBoards: '¿Nuevo en 4ga Boards?',
+      newToBoards: '¿Nuevo en {{appName}}?',
       pageNotFound_title: 'Página no encontrada',
       password: 'Contraseña',
       privacyPolicy: 'Política de Privacidad',

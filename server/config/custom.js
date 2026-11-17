@@ -17,6 +17,8 @@ module.exports.custom = {
   baseUrl: process.env.BASE_URL,
   clientUrl: process.env.CLIENT_URL || (process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://localhost:3000'),
   instanceName: process.env.INSTANCE_NAME || '4gaboards.com',
+  appName: process.env.APP_NAME || '4ga Boards',
+  brandingPath: process.env.BRANDING_PATH,
 
   tokenExpiresIn: parseInt(process.env.TOKEN_EXPIRES_IN, 10) || 365,
 

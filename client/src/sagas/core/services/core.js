@@ -104,6 +104,10 @@ export function* fetchCoreSettingsPublic() {
   const { hyperdxEnabled, hyperdxApiKey, hyperdxInstanceName, hyperdxTracePropagationTargets, otelUrl, otelUrlFormat } = coreSettings;
   initializeHyperDX(hyperdxEnabled, hyperdxApiKey, hyperdxInstanceName, hyperdxTracePropagationTargets, otelUrl, otelUrlFormat);
 
+  if (coreSettings.appName) {
+    i18n.options.interpolation.defaultVariables = { ...i18n.options.interpolation.defaultVariables, appName: coreSettings.appName };
+  }
+
   yield put(actions.fetchCoreSettingsPublic(coreSettings));
 }
 

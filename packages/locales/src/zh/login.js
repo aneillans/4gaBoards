@@ -12,7 +12,7 @@ export default {
       login: '登录',
       logIn: '登录',
       logInToBoards: '登录',
-      newToBoards: '刚来到 4ga Boards?',
+      newToBoards: '刚来到 {{appName}}?',
       pageNotFound_title: '页面未找到',
       password: '密码',
       privacyPolicy: '隐私政策',

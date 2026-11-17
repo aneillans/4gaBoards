@@ -121,7 +121,7 @@ module.exports = {
       });
     const relatedDataSubject = relatedDataEntries.map(({ value }) => value).join(' | ') || '';
     const subjectScope = `[${localizedScope.toUpperCase()}] ${relatedDataSubject}`.trim();
-    const subject = `${subjectScope} - 4ga Boards Notifications (${sails.config.custom.instanceName})`;
+    const subject = `${subjectScope} - ${sails.config.custom.appName} Notifications (${sails.config.custom.instanceName})`;
 
     const baseClientUrl = sails.config.custom.clientUrl;
     const relatedDataLinks = buildActionLinks(firstAction, baseClientUrl);

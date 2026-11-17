@@ -15,6 +15,8 @@ import * as s from './Header.module.scss';
 
 const Header = React.memo(
   ({
+    appName,
+    iconUrl,
     path,
     project,
     user,
@@ -74,7 +76,7 @@ const Header = React.memo(
       <div className={s.wrapper}>
         <Link to={Paths.ROOT} className={s.logo}>
           <Button variant={ButtonVariant.HeaderLogo} title={t('common.dashboard')}>
-            <img src={logo} alt="4ga Boards" className={s.logoIcon} />
+            <img src={iconUrl || logo} alt={appName} className={s.logoIcon} />
           </Button>
         </Link>
         <div className={s.title} title={getPageHeaderTitle()}>
@@ -143,6 +145,8 @@ const Header = React.memo(
 );
 
 Header.propTypes = {
+  appName: PropTypes.string.isRequired,
+  iconUrl: PropTypes.string,
   path: PropTypes.string,
   project: PropTypes.object, // eslint-disable-line react/forbid-prop-types
   user: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
@@ -167,6 +171,7 @@ Header.propTypes = {
 };
 
 Header.defaultProps = {
+  iconUrl: null,
   path: undefined,
   project: undefined,
 };

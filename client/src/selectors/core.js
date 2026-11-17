@@ -28,6 +28,9 @@ export const selectCoreSettings = createSelector(orm, ({ Core }) => {
     }, {});
 
     coreModel = {
+      appName: '4ga Boards',
+      logoUrl: null,
+      iconUrl: null,
       ssoRegistrationEnabled: false,
       localRegistrationEnabled: false,
       registrationEnabled: false,

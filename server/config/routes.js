@@ -148,8 +148,33 @@ module.exports.routes = {
 
   'GET /.well-known/assetlinks.json': 'assetlinks/show',
 
+  'GET /branding/:name': {
+    action: 'branding/show',
+    skipAssets: false,
+  },
+
+  'GET /favicon.ico': {
+    action: 'branding/show-static',
+    skipAssets: false,
+  },
+
+  'GET /4gaboards192w.png': {
+    action: 'branding/show-static',
+    skipAssets: false,
+  },
+
+  'GET /4gaboards512w.png': {
+    action: 'branding/show-static',
+    skipAssets: false,
+  },
+
+  'GET /manifest.json': {
+    action: 'branding/show-static',
+    skipAssets: false,
+  },
+
   'GET /*': {
-    view: 'index',
+    action: 'branding/index-page',
     skipAssets: true,
   },
 };

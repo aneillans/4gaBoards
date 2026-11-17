@@ -19,7 +19,10 @@ const mapStateToProps = (state) => {
   const isCurrentUserManager = selectors.selectIsCurrentUserManagerForCurrentProject(state);
   const { demoMode } = selectors.selectCoreSettings(state);
 
+  const { appName, iconUrl } = selectors.selectCoreSettings(state);
   return {
+    appName,
+    iconUrl,
     path,
     notifications,
     filteredNotifications,

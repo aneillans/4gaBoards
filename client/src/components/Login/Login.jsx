@@ -82,6 +82,8 @@ const SSO_PROVIDERS = [
 
 const Login = React.memo(
   ({
+    appName,
+    logoUrl,
     defaultData,
     isSubmitting,
     error,
@@ -112,11 +114,9 @@ const Login = React.memo(
     const emailOrUsernameField = useRef(null);
     const passwordField = useRef(null);
 
-    const mainTitle = '4ga Boards';
-
     useEffect(() => {
-      document.title = `${t('common.login')} | ${mainTitle}`;
-    }, [t]);
+      document.title = `${t('common.login')} | ${appName}`;
+    }, [appName, t]);
 
     const handleSubmit = useCallback(() => {
       const cleanData = {
@@ -193,7 +193,7 @@ const Login = React.memo(
     return (
       <div className={clsx(s.wrapper, gs.scrollableY)}>
         <div className={s.loginWrapper}>
-          <img src={logo} className={s.logo} alt="4ga Boards" />
+          <img src={logoUrl || logo} className={s.logo} alt={appName} />
           <h1 className={s.formTitle}>{t('common.logInToBoards')}</h1>
           <div>
             {message && <Message variant={message.type === 'error' ? MessageVariant.Error : MessageVariant.Warning} content={t(message.content)} onDismiss={onMessageDismiss} className={s.message} />}
@@ -287,6 +287,8 @@ const Login = React.memo(
 );
 
 Login.propTypes = {
+  appName: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string,
   defaultData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isSubmitting: PropTypes.bool.isRequired,
   error: PropTypes.object, // eslint-disable-line react/forbid-prop-types
@@ -302,6 +304,7 @@ Login.propTypes = {
 };
 
 Login.defaultProps = {
+  logoUrl: null,
   error: undefined,
 };
 

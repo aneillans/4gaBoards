@@ -29,6 +29,7 @@ module.exports.policies = {
 
   'core/show': true,
   'assetlinks/show': true,
+  'branding/*': true,
   'auth/*': true,
   'register/create': true,
   'notifications/receive-system-notification': true,

@@ -15,36 +15,35 @@ import UsersSettingsContainer from '../../containers/Settings/UsersSettingsConta
 
 import * as s from './Settings.module.scss';
 
-const Settings = React.memo(({ path, isAdmin, isManager }) => {
+const Settings = React.memo(({ appName, path, isAdmin, isManager }) => {
   const [t] = useTranslation();
-  const mainTitle = '4ga Boards';
 
   const getPageTitle = useCallback(() => {
     switch (path) {
       case Paths.SETTINGS:
-        return `${t('common.settings')} | ${mainTitle}`;
+        return `${t('common.settings')} | ${appName}`;
       case Paths.SETTINGS_PROFILE:
-        return `${t('common.settingsProfile')} | ${mainTitle}`;
+        return `${t('common.settingsProfile')} | ${appName}`;
       case Paths.SETTINGS_PREFERENCES:
-        return `${t('common.settingsPreferences')} | ${mainTitle}`;
+        return `${t('common.settingsPreferences')} | ${appName}`;
       case Paths.SETTINGS_PREFERENCES_THEME:
-        return `${t('common.settingsPreferencesTheme')} | ${mainTitle}`;
+        return `${t('common.settingsPreferencesTheme')} | ${appName}`;
       case Paths.SETTINGS_ACCOUNT:
-        return `${t('common.settingsAccount')} | ${mainTitle}`;
+        return `${t('common.settingsAccount')} | ${appName}`;
       case Paths.SETTINGS_AUTHENTICATION:
-        return `${t('common.settingsAuthentication')} | ${mainTitle}`;
+        return `${t('common.settingsAuthentication')} | ${appName}`;
       case Paths.SETTINGS_ABOUT:
-        return `${t('common.settingsAbout')} | ${mainTitle}`;
+        return `${t('common.settingsAbout')} | ${appName}`;
       case Paths.SETTINGS_INSTANCE:
-        return `${t('common.settingsInstance')} | ${mainTitle}`;
+        return `${t('common.settingsInstance')} | ${appName}`;
       case Paths.SETTINGS_USERS:
-        return `${t('common.settingsUsers')} | ${mainTitle}`;
+        return `${t('common.settingsUsers')} | ${appName}`;
       case Paths.SETTINGS_PROJECT:
-        return `${t('common.settingsProject')} | ${mainTitle}`;
+        return `${t('common.settingsProject')} | ${appName}`;
       default:
-        return mainTitle;
+        return appName;
     }
-  }, [path, t]);
+  }, [appName, path, t]);
 
   useEffect(() => {
     document.title = getPageTitle();
@@ -84,6 +83,7 @@ const Settings = React.memo(({ path, isAdmin, isManager }) => {
 });
 
 Settings.propTypes = {
+  appName: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
   isAdmin: PropTypes.bool.isRequired,
   isManager: PropTypes.bool.isRequired,

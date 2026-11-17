@@ -12,7 +12,7 @@ export default {
       login: 'Logga in',
       logIn: 'Logga in',
       logInToBoards: 'Logga in',
-      newToBoards: 'Ny på 4ga Boards?',
+      newToBoards: 'Ny på {{appName}}?',
       pageNotFound_title: 'Sidan hittades inte',
       password: 'Lösenord',
       privacyPolicy: 'Integritetspolicy',

@@ -56,6 +56,8 @@ spec:
             value: {{ .Values.env.optional.CLIENT_URL }}
           - name: INSTANCE_NAME
             value: {{ .Values.env.optional.INSTANCE_NAME }}
+          - name: APP_NAME
+            value: {{ .Values.env.optional.APP_NAME }}
           - name: DEFAULT_ADMIN_USERNAME
             value: {{ .Values.env.optional.DEFAULT_ADMIN_USERNAME }}
           - name: DEFAULT_ADMIN_EMAIL

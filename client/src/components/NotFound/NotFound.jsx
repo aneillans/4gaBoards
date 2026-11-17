@@ -8,15 +8,14 @@ import { Loader, LoaderSize, Button, ButtonVariant, Icon, IconType, IconSize } f
 
 import * as s from './NotFound.module.scss';
 
-const NotFound = React.memo(({ isInitializing, isSocketDisconnected }) => {
+const NotFound = React.memo(({ appName, isInitializing, isSocketDisconnected }) => {
   const [t] = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
-  const mainTitle = '4ga Boards';
 
   useEffect(() => {
-    document.title = `${t('common.pageNotFound', { context: 'title' })} | ${mainTitle}`;
-  }, [t]);
+    document.title = `${t('common.pageNotFound', { context: 'title' })} | ${appName}`;
+  }, [appName, t]);
 
   const handleToggleCollapse = useCallback(() => {
     setIsCollapsed(!isCollapsed);
@@ -60,6 +59,7 @@ const NotFound = React.memo(({ isInitializing, isSocketDisconnected }) => {
 });
 
 NotFound.propTypes = {
+  appName: PropTypes.string.isRequired,
   isInitializing: PropTypes.bool.isRequired,
   isSocketDisconnected: PropTypes.bool.isRequired,
 };

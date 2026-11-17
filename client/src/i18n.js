@@ -74,6 +74,8 @@ i18n
     load: 'currentOnly',
     interpolation: {
       escapeValue: false,
+      // The instance's product name (APP_NAME), set once core settings load
+      defaultVariables: { appName: '4ga Boards' },
     },
     react: {
       useSuspense: true,

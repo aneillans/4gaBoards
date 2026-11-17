@@ -12,7 +12,9 @@ const mapStateToProps = (state) => {
   const currentCard = selectors.selectCurrentCard(state);
   const userPrefs = selectors.selectCurrentUserPrefs(state);
 
+  const { appName } = selectors.selectCoreSettings(state);
   return {
+    appName,
     isSocketDisconnected,
     currentModal,
     currentProject,
