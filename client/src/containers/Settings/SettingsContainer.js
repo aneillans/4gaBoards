@@ -8,7 +8,9 @@ const mapStateToProps = (state) => {
   const currentUser = selectors.selectCurrentUser(state);
   const isManager = selectors.selectIsCurrentUserManagerForCurrentProject(state);
 
+  const { appName } = selectors.selectCoreSettings(state);
   return {
+    appName,
     path,
     isAdmin: currentUser.isAdmin,
     isManager,

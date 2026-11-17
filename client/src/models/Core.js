@@ -17,6 +17,9 @@ export default class extends BaseModel {
 
   static fields = {
     id: attr(),
+    appName: attr(),
+    logoUrl: attr(),
+    iconUrl: attr(),
     registrationEnabled: attr(),
     localRegistrationEnabled: attr(),
     ssoRegistrationEnabled: attr(),

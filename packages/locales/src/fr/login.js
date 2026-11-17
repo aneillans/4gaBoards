@@ -12,7 +12,7 @@ export default {
       login: 'Se connecter',
       logIn: 'Se connecter',
       logInToBoards: 'Se connecter',
-      newToBoards: 'Vous débutez avec les cartes 4ga Boards?',
+      newToBoards: 'Vous débutez avec les cartes {{appName}}?',
       pageNotFound_title: 'Page non trouvée',
       password: 'Mot de passe',
       privacyPolicy: 'Politique de confidentialité',

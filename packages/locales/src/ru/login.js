@@ -12,7 +12,7 @@ export default {
       login: 'Voyti',
       logIn: 'Voyti',
       logInToBoards: 'Voyti',
-      newToBoards: 'Vpervye v 4ga Boards?',
+      newToBoards: 'Vpervye v {{appName}}?',
       pageNotFound_title: 'Stranica ne naydena',
       password: 'Parol',
       privacyPolicy: 'Politika konfidencialnosti',

@@ -12,27 +12,26 @@ import { Loader, LoaderSize, Button, ButtonVariant, Icon, IconType, IconSize } f
 
 import * as s from './Core.module.scss';
 
-const Core = React.memo(({ isInitializing, isSocketDisconnected, currentProject, currentBoard, currentCard, theme, themeShape, themeCustomColors }) => {
+const Core = React.memo(({ appName, isInitializing, isSocketDisconnected, currentProject, currentBoard, currentCard, theme, themeShape, themeCustomColors }) => {
   const [t] = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showDisconnected, setShowDisconnected] = useState(false);
-  const mainTitle = '4ga Boards';
 
   useEffect(() => {
-    let title = `${mainTitle}`;
+    let title = `${appName}`;
     if (currentProject) {
-      title = `${currentProject.name} | ${mainTitle}`;
+      title = `${currentProject.name} | ${appName}`;
       if (currentBoard) {
-        title = `${currentBoard.name} · ${currentProject.name} | ${mainTitle}`;
+        title = `${currentBoard.name} · ${currentProject.name} | ${appName}`;
         if (currentCard) {
           const parts = currentCard.name.split(/(\s+)/);
           const cardName = parts.map((part) => beautifyLink(part)).join('');
-          title = `${cardName} - ${currentBoard.name} · ${currentProject.name} | ${mainTitle}`;
+          title = `${cardName} - ${currentBoard.name} · ${currentProject.name} | ${appName}`;
         }
       }
     }
     document.title = title;
-  }, [currentBoard, currentCard, currentProject]);
+  }, [appName, currentBoard, currentCard, currentProject]);
 
   useEffect(() => {
     const body = document.getElementById('app');
@@ -104,6 +103,7 @@ const Core = React.memo(({ isInitializing, isSocketDisconnected, currentProject,
 });
 
 Core.propTypes = {
+  appName: PropTypes.string.isRequired,
   isInitializing: PropTypes.bool.isRequired,
   isSocketDisconnected: PropTypes.bool.isRequired,
   currentProject: PropTypes.object, // eslint-disable-line react/forbid-prop-types

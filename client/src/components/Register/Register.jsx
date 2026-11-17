@@ -90,6 +90,8 @@ const SSO_PROVIDERS = [
 
 const Register = React.memo(
   ({
+    appName,
+    logoUrl,
     defaultData,
     isSubmitting,
     error,
@@ -127,11 +129,9 @@ const Register = React.memo(
     const passwordField = useRef(null);
     const policyCheckbox = useRef(null);
 
-    const mainTitle = '4ga Boards';
-
     useEffect(() => {
-      document.title = `${t('common.register')} | ${mainTitle}`;
-    }, [t]);
+      document.title = `${t('common.register')} | ${appName}`;
+    }, [appName, t]);
 
     const handlePolicyToggleChange = useCallback(
       (e) => {
@@ -224,7 +224,7 @@ const Register = React.memo(
     return (
       <div className={clsx(s.wrapper, gs.scrollableY)}>
         <div className={s.loginWrapper}>
-          <img src={logo} className={s.logo} alt="4ga Boards" />
+          <img src={logoUrl || logo} className={s.logo} alt={appName} />
           <h1 className={s.formTitle}>{t('common.createYourAccount')}</h1>
           <div>
             {message && <Message variant={message.type === 'error' ? MessageVariant.Error : MessageVariant.Warning} content={t(message.content)} onDismiss={onMessageDismiss} className={s.message} />}
@@ -329,6 +329,8 @@ const Register = React.memo(
 );
 
 Register.propTypes = {
+  appName: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string,
   defaultData: PropTypes.object.isRequired, // eslint-disable-line react/forbid-prop-types
   isSubmitting: PropTypes.bool.isRequired,
   error: PropTypes.object, // eslint-disable-line react/forbid-prop-types
@@ -345,6 +347,7 @@ Register.propTypes = {
 };
 
 Register.defaultProps = {
+  logoUrl: null,
   error: undefined,
 };
 

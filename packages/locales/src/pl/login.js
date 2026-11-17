@@ -12,7 +12,7 @@ export default {
       login: 'Logowanie',
       logIn: 'Zaloguj',
       logInToBoards: 'Logowanie',
-      newToBoards: 'Nowy użytkownik?',
+      newToBoards: 'Nowy w {{appName}}?',
       pageNotFound_title: 'Nie znaleziono strony',
       password: 'Hasło',
       privacyPolicy: 'Politykę prywatności',

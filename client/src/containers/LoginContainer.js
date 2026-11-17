@@ -13,7 +13,10 @@ const mapStateToProps = (state) => {
   } = state;
   const { ssoAvailable, oidcEnabledMethods, registrationEnabled, localRegistrationEnabled, ssoRegistrationEnabled, oidcOnlyRegistration } = selectors.selectCoreSettings(state);
 
+  const { appName, logoUrl } = selectors.selectCoreSettings(state);
   return {
+    appName,
+    logoUrl,
     defaultData,
     isSubmitting,
     ssoAvailable,

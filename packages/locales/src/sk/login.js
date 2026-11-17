@@ -12,7 +12,7 @@ export default {
       login: 'Prihlásiť sa',
       logIn: 'Prihlásiť sa',
       logInToBoards: 'Prihlásiť sa',
-      newToBoards: 'Nový v 4ga Boards?',
+      newToBoards: 'Nový v {{appName}}?',
       pageNotFound_title: 'Stránka nenájdená',
       password: 'Heslo',
       privacyPolicy: 'Ochrana osobných údajov',

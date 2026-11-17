@@ -12,7 +12,7 @@ export default {
       login: '로그인',
       logIn: '로그인',
       logInToBoards: '로그인',
-      newToBoards: '4ga Boards 처음이신가요?',
+      newToBoards: '{{appName}} 처음이신가요?',
       pageNotFound_title: '페이지를 찾을 수 없습니다',
       password: '비밀번호',
       privacyPolicy: '개인정보처리방침',

@@ -7,7 +7,9 @@ const mapStateToProps = (state) => {
   const isCoreInitializing = selectors.selectIsCoreInitializing(state);
   const isSocketDisconnected = selectors.selectIsSocketDisconnected(state);
 
+  const { appName } = selectors.selectCoreSettings(state);
   return {
+    appName,
     isSocketDisconnected,
     isInitializing: isCoreInitializing,
   };

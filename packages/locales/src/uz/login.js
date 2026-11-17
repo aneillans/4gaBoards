@@ -12,7 +12,7 @@ export default {
       login: 'Kirish',
       logIn: 'Kirish',
       logInToBoards: 'Kirish',
-      newToBoards: '4ga Boardsda yangimisiz?',
+      newToBoards: '{{appName}}da yangimisiz?',
       pageNotFound_title: 'Sahifa topilmadi',
       password: 'Parol',
       privacyPolicy: 'Maxfiylik siyosati',
